@@ -107,7 +107,7 @@ json_annotation: ^2.4.0 #json序列化和反序列化用的
 
 ## 范例说明
 
-这边写四个个示例，来演示fish_redux的使用
+这边写四个示例，来演示fish_redux的使用
 
 - 计数器
   - fish_redux正常情况下的流转过程
