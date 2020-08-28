@@ -5,6 +5,11 @@
 首先，有很多的文章在说flutter bloc模式的应用，但是百分之八九十的文章都是在说，使用StreamController+StreamBuilder搭建bloc，提升性能的会加上InheritedWidget，这些文章看了很多，真正写使用bloc作者开发的flutter_bloc却少之又少。没办法，只能去bloc的github上去找使用方式，最后去bloc官网翻文档。
 蛋痛，各位叼毛，就不能好好说说flutter_bloc的使用吗？非要各种抄bloc模式提出作者的那俩篇文章。现在，搞的杂家这个伸手党要自己去翻文档总结（手动滑稽）。
 ![表情1](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20200804152051.png)
+
+**项目效果（建议PC浏览器打开）**
+
+- http://cnad666.gitee.io/book_web_manage
+
 **来来，伸手党们，赶紧保存下面的链接**
 
 - Flutter_Bloc起源：[https://www.didierboelens.com/2018/08/reactive-programming-streams-bloc/](https://www.didierboelens.com/2018/08/reactive-programming-streams-bloc/)
@@ -361,13 +366,6 @@ class MainState {
   int selectedIndex;
   bool isExtended;
 
-  //PageView页面
-  List<Widget> pageList = [
-    Center(child: Text("页面一")),
-    SettingPage(),
-    Center(child: Text("页面三")),
-  ];
-
   ///初始化方法,基础变量也需要赋初值,不然会报空异常
   MainState init() {
     return MainState()
@@ -474,7 +472,7 @@ class MainPage extends StatelessWidget {
 
 - Bloc还有很多Api针对不同的场景非常的实用，例如：MultiBlocProvider，BlocListener，MultiBlocListener，BlocConsumer等等，这里面有些Api和Provider的Api是非常相似的，例如MultiXxxxx，这都是为了减少嵌套，提供多个全局Bloc而提供，大家可以去瞧瞧看，用法也都非常的相似
 - 项目代码地址
-  - [https://github.com/CNAD666/book_web](https://github.com/CNAD666/book_web)
+  - https://github.com/CNAD666/book_web_manage
 - flutter_bloc相关Api白嫖地址
   - [https://bloclibrary.dev/#/flutterbloccoreconcepts?id=bloc-widgets](https://bloclibrary.dev/#/flutterbloccoreconcepts?id=bloc-widgets)
 - flutter_redux
