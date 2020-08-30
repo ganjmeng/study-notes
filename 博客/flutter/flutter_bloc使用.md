@@ -8,7 +8,7 @@
 
 **项目效果（建议PC浏览器打开）**
 
-- http://cnad666.gitee.io/book_web_manage
+- [http://cnad666.gitee.io/book_web_manage](http://cnad666.gitee.io/book_web_manage)
 
 **来来，伸手党们，赶紧保存下面的链接**
 
@@ -446,7 +446,10 @@ class MainBloc extends Bloc<MainEvent, MainState> {
 ```
 
 - view
-  - view层代码太多，这边只增加了个初始化事件，就不重新把全部代码贴出来了，初始化操作直接在创建的时候，在XxxBloc上使用add()方法就行了，就能起到进入页面，初始化一次得效果；add()方法也是Bloc类中提供的，遍历事件的时候，就特地检查了add()这个方法是否添加了时间；说明，这是框架特地提供了一个初始化的方法
+  - view层代码太多，这边只增加了个初始化事件，就不重新把全部代码贴出来了，初始化操作直接在创建的时候，在XxxBloc上使用add()方法就行了，就能起到进入页面，初始化一次的效果；add()方法也是Bloc类中提供的，遍历事件的时候，就特地检查了add()这个方法是否添加了事件；说明，这是框架特地提供了一个初始化的方法
+  - 这个初始化方式是在官方示例找到的
+    - 项目名：Flutter Infinite List Tutorial
+    - 项目地址：[https://bloclibrary.dev/#/flutterinfinitelisttutorial?id=flutter-infinite-list-tutorial](https://bloclibrary.dev/#/flutterinfinitelisttutorial?id=flutter-infinite-list-tutorial)
 
 ```dart
 class MainPage extends StatelessWidget {
@@ -472,7 +475,7 @@ class MainPage extends StatelessWidget {
 
 - Bloc还有很多Api针对不同的场景非常的实用，例如：MultiBlocProvider，BlocListener，MultiBlocListener，BlocConsumer等等，这里面有些Api和Provider的Api是非常相似的，例如MultiXxxxx，这都是为了减少嵌套，提供多个全局Bloc而提供，大家可以去瞧瞧看，用法也都非常的相似
 - 项目代码地址
-  - https://github.com/CNAD666/book_web_manage
+  - [https://github.com/CNAD666/book_web_manage](https://github.com/CNAD666/book_web_manage)
 - flutter_bloc相关Api白嫖地址
   - [https://bloclibrary.dev/#/flutterbloccoreconcepts?id=bloc-widgets](https://bloclibrary.dev/#/flutterbloccoreconcepts?id=bloc-widgets)
 - flutter_redux

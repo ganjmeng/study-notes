@@ -1471,9 +1471,278 @@ Widget _bodyWidget(CountState state, Dispatch dispatch) {
 
 - 如果其他模块也需要做主题色，也按照此处逻辑改动即可
 
+#### 调用
+
+- 调用状态更新就非常简单了，和正常模块更新View一样，这里我们调用全局的就行了，一行代码搞定，在需要的地方调用就OK了
+
+```dart
+GlobalStore.store.dispatch(GlobalActionCreator.onChangeThemeColor());
+```
+
 ### 搞定
 
 - 经过上面的的三步，我们就可以使用全局状态了；从上面子模块的使用，可以很明显的感受到，全局状态，必须前期做好字段的规划，确定之后，最好不要再增加字段，不然继承抽象类的多个模块都会爆红，提示去实现xxx变量
+
+## 全局模块优化
+
+### 反思
+
+在上面的全局模式里说了，使用全局模块，前期需要规划好字段，不然项目进行到中期的时候，想添加字段，多个模块的State会出现大范围爆红，提示去实现你添加的字段；项目开始规划好所有的字段，显然这需要全面的考虑好大部分场景，但是人的灵感总是无限的，不改代码是不可能，这辈子都不可能。只能想办法看能不能添加一次字段后，后期添加字段，并不会引起其他模块爆红，试了多次，成功的使用中间实体，来解决该问题
+
+这里优化俩个方面
+
+- 使用通用的全局实体
+  - 这样后期添加字段，就不会影响其他模块，这样我们就能一个个模块的去整改，不会出现整个项目不能运行的情况
+- 将路由模块和全局模块封装
+  - 路由模块后期页面多了，代码会很多，放在主入口，真的不好管理；全局模块同理
+
+因为使用中间实体，有一些地方会出现空指针问题，我都在流程里面写清楚了，大家可以把优化流程完整看一遍哈，都配置好，后面拓展使用就不会报空指针了
+
+### 优化
+
+#### 入口模块
+
+- main：大改
+  - 从下面代码可以看到，这里将路由模块和全局模块单独提出来了，这地方为了方便观看，就写在一个文件里；说明下，RouteConfig和StoreConfig这俩个类，可以放在俩个不同的文件里，这样管理路由和全局字段更新就会很方便了！
+  - RouteConfig：这里将页面标识和页面映射分开写，这样我们跳转页面的时候，就可以直接引用RouteConfig里面的页面标识
+  - StoreConfig：全局模块里最重要的就是状态的判断，注释写的很清楚了，可以看看注释哈
+
+```dart
+void main() {
+  runApp(createApp());
+}
+
+Widget createApp() {
+  return MaterialApp(
+    title: 'FishRedux',
+    home: RouteConfig.routes.buildPage(RouteConfig.guidePage, null), //作为默认页面
+    onGenerateRoute: (RouteSettings settings) {
+      //ios页面切换风格
+      return CupertinoPageRoute(builder: (BuildContext context) {
+        return RouteConfig.routes.buildPage(settings.name, settings.arguments);
+      });
+    },
+  );
+}
+
+///路由管理
+class RouteConfig {
+  ///定义你的路由名称比如   static final String routeHome = 'page/home';
+  ///导航页面
+  static const String guidePage = 'page/guide';
+
+  ///计数器页面
+  static const String countPage = 'page/count';
+
+  ///页面传值跳转模块演示
+  static const String firstPage = 'page/first';
+  static const String secondPage = 'page/second';
+
+  ///列表模块演示
+  static const String listPage = 'page/list';
+  static const String listEditPage = 'page/listEdit';
+
+  static final AbstractRoutes routes = PageRoutes(
+    pages: <String, Page<Object, dynamic>>{
+      ///将你的路由名称和页面映射在一起，比如：RouteConfig.homePage : HomePage(),
+      RouteConfig.guidePage: GuidePage(),
+      RouteConfig.countPage: CountPage(),
+      RouteConfig.firstPage: FirstPage(),
+      RouteConfig.secondPage: SecondPage(),
+      RouteConfig.listPage: ListPage(),
+      RouteConfig.listEditPage: ListEditPage(),
+    },
+    visitor: StoreConfig.visitor,
+  );
+}
+
+///全局模式
+class StoreConfig {
+  ///全局状态管理
+  static _updateState() {
+    return (Object pageState, GlobalState appState) {
+      final GlobalBaseState p = pageState;
+
+      if (pageState is Cloneable) {
+        final Object copy = pageState.clone();
+        final GlobalBaseState newState = copy;
+
+        if (p.store == null) {
+          ///这地方的判断是必须的，判断第一次store对象是否为空
+          newState.store = appState.store;
+        } else {
+          /// 这地方增加字段判断，是否需要更新
+          if ((p.store.themeColor != appState.store.themeColor)) {
+            newState.store.themeColor = appState.store.themeColor;
+          }
+
+          /// 如果增加字段，同理上面的判断然后赋值...
+
+        }
+
+        /// 返回新的 state 并将数据设置到 ui
+        return newState;
+      }
+      return pageState;
+    };
+  }
+
+  static visitor(String path, Page<Object, dynamic> page) {
+    if (page.isTypeof<GlobalBaseState>()) {
+      ///建立AppStore驱动PageStore的单向数据连接
+      ///参数1 AppStore  参数2 当AppStore.state变化时,PageStore.state该如何变化
+      page.connectExtraStore<GlobalState>(GlobalStore.store, _updateState());
+    }
+  }
+}
+```
+
+#### Store模块
+
+**下面俩个模块是需要改动代码的模块**
+
+- state
+  - 这里使用了StoreModel中间实体，注意，这地方实体字段store，初始化是必须的，不然在子模块引用该实体下的字段会报空指针
+
+```dart
+abstract class GlobalBaseState{
+  StoreModel store;
+}
+
+class GlobalState implements GlobalBaseState, Cloneable<GlobalState>{
+
+  @override
+  GlobalState clone() {
+    return GlobalState();
+  }
+
+  @override
+  StoreModel store = StoreModel(
+    /// store这个变量,在这必须示例化,不然引用该变量中的字段,会报空指针
+    /// 下面的字段,赋初值,就是初始时展示的全局状态
+    /// 这地方初值,理应从缓存或数据库中取,表明用户选择的全局状态
+    themeColor: Colors.lightBlue
+  );
+}
+
+///中间全局实体
+///需要增加字段就在这个实体里面添加就行了
+class StoreModel {
+  Color themeColor;
+
+  StoreModel({this.themeColor});
+}
+```
+
+- reducer
+  - 这地方改动非常小，将state.themeColor改成state.store.themeColor
+
+```dart
+Reducer<GlobalState> buildReducer(){
+  return asReducer(
+    <Object, Reducer<GlobalState>>{
+      GlobalAction.changeThemeColor: _onChangeThemeColor,
+    },
+  );
+}
+
+List<Color> _colors = <Color>[
+  Colors.green,
+  Colors.red,
+  Colors.black,
+  Colors.blue
+];
+
+GlobalState _onChangeThemeColor(GlobalState state, Action action) {
+  final Color next =
+  _colors[((_colors.indexOf(state.store.themeColor) + 1) % _colors.length)];
+  return state.clone()..store.themeColor = next;
+}
+```
+
+**下面俩个模块代码没有改动，但是为了思路完整，同样贴出来**
+
+- action
+
+```dart
+enum GlobalAction { changeThemeColor }
+
+class GlobalActionCreator{
+  static Action onChangeThemeColor(){
+    return const Action(GlobalAction.changeThemeColor);
+  }
+}
+```
+
+- store
+
+```dart
+class GlobalStore{
+  static Store<GlobalState> _globalStore;
+  static Store<GlobalState> get store => _globalStore ??= createStore<GlobalState>(GlobalState(), buildReducer());
+}
+```
+
+#### 子模块使用
+
+- 这里就用计数器模块的来举例，因为仅仅只需要改动少量代码，且只涉及state和view，所以其它模块代码也不重复贴出了
+- state
+  - 因为是用中间实体，所以在clone方法里面必须将实现的store字段加上，不然会报空指针
+
+```dart
+class CountState implements Cloneable<CountState>, GlobalBaseState {
+  int count;
+
+  @override
+  CountState clone() {
+    return CountState()
+      ..count = count
+      ..store = store;
+  }
+
+  @override
+  StoreModel store;
+}
+
+CountState initState(Map<String, dynamic> args) {
+  return CountState()..count = 0;
+}
+```
+
+- view
+  - 这里面仅仅改动了一行，在AppBar里面加了backgroundColor，然后使用state里面的全局主题色
+
+```dart
+Widget buildView(CountState state, Dispatch dispatch, ViewService viewService) {
+  return _bodyWidget(state, dispatch);
+}
+
+Widget _bodyWidget(CountState state, Dispatch dispatch) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text("FishRedux"),
+      ///全局主题，仅仅在此处改动了一行
+      backgroundColor: state.store.themeColor,
+    ),
+    ///下面其余代码省略....
+}
+```
+
+- 如果其他模块也需要做主题色，也按照此处逻辑改动即可
+
+#### 调用
+
+- 调用和上面说的一样，用下述全局方式在合适的地方调用
+
+```dart
+GlobalStore.store.dispatch(GlobalActionCreator.onChangeThemeColor());
+```
+
+### 体验
+
+通过上面的优化，使用体验提升不是一个级别，大大提升的全局模式的扩展性，我们就算后期增加了大量的全局字段，也可以一个个模块慢慢改，不用一次爆肝全改完，猝死的概率又大大减少了！
+
+![img](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/bookWeb/20200829194220.jpg)
 
 ## 最后
 
