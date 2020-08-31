@@ -12,13 +12,13 @@
 
 **来来，伸手党们，赶紧保存下面的链接**
 
-- Flutter_Bloc起源：[https://www.didierboelens.com/2018/08/reactive-programming-streams-bloc/](https://www.didierboelens.com/2018/08/reactive-programming-streams-bloc/)
+- [Flutter_Bloc起源](https://www.didierboelens.com/2018/08/reactive-programming-streams-bloc/)
 
-- Flutter_Bloc模式优化：[https://www.didierboelens.com/2018/12/reactive-programming-streams-bloc-practical-use-cases/](https://www.didierboelens.com/2018/12/reactive-programming-streams-bloc-practical-use-cases/)
+- [Flutter_Bloc模式优化](https://www.didierboelens.com/2018/12/reactive-programming-streams-bloc-practical-use-cases/)
 
-- Flutter_Bloc诞生：[https://medium.com/flutter-community/flutter-bloc-package-295b53e95c5c](https://medium.com/flutter-community/flutter-bloc-package-295b53e95c5c)
+- [Flutter_Bloc诞生](https://medium.com/flutter-community/flutter-bloc-package-295b53e95c5c)
 
-- Flutter_Bloc官网文档：[https://bloclibrary.dev/#/](https://bloclibrary.dev/#/)
+- [Flutter_Bloc官网文档](https://bloclibrary.dev/#/)
 
   前面三个，是bloc作者写的bloc模式文档，典型的观察者模式的应用，最原始的就是java中CallBack形式。前俩篇文章就是咱们这些大抄子的主要“参考”的资料来源，这三篇文章在掘金上有翻译版，搜下bloc就能找到。最后一篇文章就是我主要总结归纳的源泉，作者在官网上写了好几个demo：计时器，登录，Todos，天气等等，大家可以自己去看看。
 
