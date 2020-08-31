@@ -1,4 +1,4 @@
-# flutter_bloc使用详解---骚年，你还在手搭bloc吗！
+# flutter_bloc使用解析---骚年，你还在手搭bloc吗！
 
 ## 前言
 
