@@ -1,5 +1,7 @@
 ## fish_redux使用详解---看完就会用！
 
+**说句心里话，这篇文章，来来回回修改了很多次，如果认真看完这篇文章，还不会写fish_redux，请在评论里喷我。**
+
 ## 前言
 
 来学学难搞的fish_redux框架吧，这个框架，官方的文档真是一言难尽，比flutter_bloc官网的文档真是逊色太多了，但是一旦知道怎么写，页面堆起来也是非常爽呀，结构分明，逻辑也会错落有致。
@@ -29,8 +31,8 @@
 
 **fish_redux相关地址**
 
-- GitHub地址：https://github.com/alibaba/fish-redux
-- Pub地址：https://pub.dev/packages/fish_redux
+- GitHub地址：[https://github.com/alibaba/fish-redux](https://github.com/alibaba/fish-redux)
+- Pub地址：[https://pub.dev/packages/fish_redux](https://pub.dev/packages/fish_redux)
 
 我用的是0.3.X的版本，算是第三版，相对于前几版，改动较大
 
@@ -107,7 +109,7 @@ json_annotation: ^2.4.0 #json序列化和反序列化用的
 
 ## 范例说明
 
-这边写四个示例，来演示fish_redux的使用
+这边写几个示例，来演示fish_redux的使用
 
 - 计数器
   - fish_redux正常情况下的流转过程
@@ -120,6 +122,11 @@ json_annotation: ^2.4.0 #json序列化和反序列化用的
   - fish_redux在ListView中使用
 - 全局模块
   - 全局切换主题
+- 全局模式优化
+  - 大幅度提升开发体验
+- Component使用
+  - page中使用component
+- 广播
 
 ## 计数器
 
@@ -905,11 +912,13 @@ class ListItemAdapter extends SourceFlowAdapter<ListState> {
   - state文件中的代码需要做一些调整，需要继承相应的类，和adapter建立起关联
   - ListState需要继承MutableSource；还必须定义一个泛型是item的ItemState类型的List，这俩个是必须的；然后实现相应的抽象方法就行了
   - 这里只要向items里写入ItemState的数据，列表就会更新了
+  - **注意：**如果使用多样式，items的列表泛型不要写成ItemState，写成Object就行了；在下面代码，我们可以看到，实现的getItemData()方法返回的类型是Object，所以Items的列表泛型写成Object，是完全可以的
 
 ```dart
 class ListState extends MutableSource implements Cloneable<ListState> {
   ///这地方一定要注意,List里面的泛型,需要定义为ItemState
   ///怎么更新列表数据,只需要更新这个items里面的数据,列表数据就会相应更新
+  ///使用多样式,请写出  List<Object> items;
   List<ItemState> items;
 
   @override
@@ -1744,13 +1753,295 @@ GlobalStore.store.dispatch(GlobalActionCreator.onChangeThemeColor());
 
 ![img](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/bookWeb/20200829194220.jpg)
 
+## Component使用
+
+Component是个比较常用的模块，上面使用列表的时候，就使用到了Component，这次我们来看看，在页面中直接使用Component，可插拔式使用！Component的使用总的来说是比较简单了，比较关键的是在State中建立起连接。
+
+### 效果图
+
+![fish_redux中component](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/bookWeb/20200905190609.gif)
+
+- 上图的效果是在页面中嵌入了俩个Component，改变子Component的操作是在页面中完成的
+- 先看下页面结构
+
+![image-20200905183821129](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20200905190707.png)
+
+### Component
+
+这地方写了一个Component，代码很简单，来看看吧
+
+- component
+
+这地方代码是自动生成了，没有任何改动，就不贴了
+
+- state
+  - initState()：我们需要注意，Component中的initState()方法在内部没有调用，虽然自动生成的代码有这个方法，但是无法起到初始化作用，可以删掉该方法
+
+```dart
+class AreaState implements Cloneable<AreaState> {
+  String title;
+  String text;
+  Color color;
+
+  AreaState({
+    this.title = "",
+    this.color = Colors.blue,
+    this.text = "",
+  });
+
+  @override
+  AreaState clone() {
+    return AreaState()
+      ..color = color
+      ..text = text
+      ..title = title;
+  }
+}
+```
+
+- view
+
+```dart
+Widget buildView(
+    AreaState state, Dispatch dispatch, ViewService viewService) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text(state.title),
+      automaticallyImplyLeading: false,
+    ),
+    body: Container(
+      height: double.infinity,
+      width: double.infinity,
+      alignment: Alignment.center,
+      color: state.color,
+      child: Text(state.text),
+    ),
+  );
+}
+```
+
+### Page
+
+CompPage中，没用到effete这层，就没创建该文件，老规矩，先看看state
+
+- state
+  - 这地方是非常重要的地方，XxxxConnecto的实现形式是看官方代码写的
+  - computed()：该方法是必须实现的，这个类似直接的get()方法，但是切记不能像get()直接返回state.leftAreaState()或state.rightAreaState，某些场景初始化无法刷新，因为是同一个对象，会被判断未更改，所以会不刷新控件
+  - set()：该方法是Component数据流回推到页面的state，保持俩者state数据一致；如果Component模块更新了自己的State，不写这个方法会报错的
+
+```dart
+class CompState implements Cloneable<CompState> {
+  AreaState leftAreaState;
+  AreaState rightAreaState;
+
+  @override
+  CompState clone() {
+    return CompState()
+      ..rightAreaState = rightAreaState
+      ..leftAreaState = leftAreaState;
+  }
+}
+
+CompState initState(Map<String, dynamic> args) {
+  ///初始化数据
+  return CompState()
+    ..rightAreaState = AreaState(
+      title: "LeftAreaComponent",
+      text: "LeftAreaComponent",
+      color: Colors.indigoAccent,
+    )
+    ..leftAreaState = AreaState(
+      title: "RightAreaComponent",
+      text: "RightAreaComponent",
+      color: Colors.blue,
+    );
+}
+
+///左边Component连接器
+class LeftAreaConnector extends ConnOp<CompState, AreaState>
+    with ReselectMixin<CompState, AreaState> {
+  @override
+  AreaState computed(CompState state) {
+    return AreaState()
+      ..color = state.leftAreaState.color
+      ..title = state.leftAreaState.title
+      ..text = state.leftAreaState.text;
+  }
+
+  @override
+  void set(CompState state, AreaState subState) {
+    state.leftAreaState = subState;
+  }
+}
+
+///右边Component连接器
+class RightAreaConnector extends ConnOp<CompState, AreaState>
+    with ReselectMixin<CompState, AreaState> {
+  @override
+  AreaState computed(CompState state) {
+    return AreaState()
+      ..color = state.rightAreaState.color
+      ..title = state.rightAreaState.title
+      ..text = state.rightAreaState.text;
+  }
+
+  @override
+  void set(CompState state, AreaState subState) {
+    state.rightAreaState = subState;
+  }
+}
+```
+
+- page
+  - 写完连接器后，我们在Page里面绑定下，就能使用Component了
+
+```dart
+class CompPage extends Page<CompState, Map<String, dynamic>> {
+  CompPage()
+      : super(
+          initState: initState,
+          reducer: buildReducer(),
+          view: buildView,
+          dependencies: Dependencies<CompState>(
+              adapter: null,
+              slots: <String, Dependent<CompState>>{
+                //绑定Component
+                "leftArea": LeftAreaConnector() + AreaComponent(),
+                "rightArea": RightAreaConnector() + AreaComponent(),
+              }),
+          middleware: <Middleware<CompState>>[],
+        );
+}
+```
+
+- view
+  - 使用Component就非常简单了：viewService.buildComponent("xxxxxx")
+
+```dart
+Widget buildView(CompState state, Dispatch dispatch, ViewService viewService) {
+  return Container(
+    color: Colors.white,
+    child: Column(
+      children: [
+        ///Component组件部分
+        Expanded(
+          flex: 3,
+          child: Row(
+            children: [
+              Expanded(child: viewService.buildComponent("leftArea")),
+              Expanded(child: viewService.buildComponent("rightArea")),
+            ],
+          ),
+        ),
+
+        ///按钮
+        Expanded(
+            flex: 1,
+            child: Center(
+              child: RawMaterialButton(
+                fillColor: Colors.blue,
+                shape: StadiumBorder(),
+                onPressed: () => dispatch(CompActionCreator.change()),
+                child: Text("改变"),
+              ),
+            ))
+      ],
+    ),
+  );
+}
+```
+
+- action
+
+```dart
+enum CompAction { change }
+
+class CompActionCreator {
+  static Action change() {
+    return const Action(CompAction.change);
+  }
+}
+```
+
+- reducer
+
+```dart
+Reducer<CompState> buildReducer() {
+  return asReducer(
+    <Object, Reducer<CompState>>{
+      CompAction.change: _change,
+    },
+  );
+}
+
+CompState _change(CompState state, Action action) {
+  final CompState newState = state.clone();
+  //改变leftAreaComponent中state
+  newState.leftAreaState.text = "LeftAreaState：${Random().nextInt(1000)}";
+  newState.leftAreaState.color =
+      Color.fromRGBO(randomColor(), randomColor(), randomColor(), 1);
+
+  //改变rightAreaComponent中state
+  newState.rightAreaState.text = "RightAreaState：${Random().nextInt(1000)}";
+  newState.rightAreaState.color =
+      Color.fromRGBO(randomColor(), randomColor(), randomColor(), 1);
+
+  return newState;
+}
+
+int randomColor() {
+  return Random().nextInt(255);
+}
+```
+
+### 总结下
+
+总的来说，Component的使用还是比较简单的；如果我们把某个复杂的列表提炼出一个Component的，很明显有个初始化的过程，这里我们需要将：请求参数调体或列表详情操作，在page页面处理好，然后再更新给我们绑定的子Component的State，这样就能起到初始化某个模块的作用；至于刷新，下拉等后续操作，就让Component内部自己去处理了
+
+## 广播
+
+fish_redux中是带有广播的通信方式，广播的通信是在页面栈之间传播，没办法传播给Component，也就是说Page页面必须注册在路由才能使用广播通信，使用的方式很简单，这本是effect层，ctx参数自带的一个api，这里简单介绍一下
+
+### 使用
+
+- 发送广播
+  - 这是页面跳转的方法，就在此处写了，如果想看的话，可以去demo地址里面看下
+
+```dart
+void _backFirst(Action action, Context<SecondState> ctx) {
+  //广播通信
+  ctx.broadcast(BroadcastActionCreator.toTest("页面二发送广播通知"));
+}
+```
+
+- 接受广播
+
+```dart
+Effect<FirstState> buildEffect() {
+  return combineEffects(<Object, Effect<FirstState>>{
+    //接受发送的广播消息
+    BroadcastAction.toNotify: _receiveNotify,
+  });
+}
+void _receiveNotify(Action action, Context<FirstState> ctx) async {
+  ///接受广播
+  print("跳转一页面:${action.payload}");
+}
+```
+
+### 说明
+
+广播的使用还是挺简单的，基本和dispatch的使用是一致的，dispatch是模块的，而broadcast是有页面栈，就能通知其他页面，很多情况下，我们在一个页面进行了操作，其他页面也需要同步做一些处理，使用广播就很简单了
+
+**注意：** 广播发送和接受是一对多的关系，一处发送，可以在多处接受；和dispatch发送事件，如果在effect里面接受，在reducer就无法接受的情况是不一样的（被拦截了）
+
 ## 最后
 
-- 这片文章，说实话，花了不少精力去写的，也花了不少时间构思；主要是例子，必须要自己重写下，尤其在dio返回的数据不能被Response解析，那地方坑了我一下午，少引了json序列化库，他也不报错，蛋蛋
+- 这片文章，说实话，花了不少精力去写的，也花了不少时间构思；主要是例子，必须要自己重写下，反复思考例子是否合理等等，头皮微凉。
 
-- 代码地址：https://github.com/CNAD666/ExampleCode/tree/master/Flutter/fish_redux_demo
+- 代码地址：[代码demo地址](https://github.com/CNAD666/ExampleCode/tree/master/Flutter/fish_redux_demo)
 
-- fish_redux版-玩Android：https://github.com/CNAD666/flutter_wan
+- fish_redux版-玩Android：[fish_redux版-玩android](https://github.com/CNAD666/flutter_wan)
 
 - 大家如果觉得有收获，就给我点个赞吧！你的点赞，是我码字的最大动力！
 
