@@ -2004,27 +2004,13 @@ fish_redux中是带有广播的通信方式，广播的通信是在页面栈之�
 
 ### 使用
 
-- action
-  - 广播事件单独写了一个action文件，便于统一管理
-
-```dart
-enum BroadcastAction { toNotify }
-
-class BroadcastActionCreator {
-  ///广播通知
-  static Action toNotify(String msg) {
-    return Action(BroadcastAction.toNotify, payload: msg);
-  }
-}
-```
-
 - 发送广播
-  - 这是页面跳转的方法，就在此处写了，如果想看详细代码的话，可以去demo地址里面看下
+  - 这是页面跳转的方法，就在此处写了，如果想看的话，可以去demo地址里面看下
 
 ```dart
 void _backFirst(Action action, Context<SecondState> ctx) {
   //广播通信
-  ctx.broadcast(BroadcastActionCreator.toNotify("页面二发送广播通知"));
+  ctx.broadcast(BroadcastActionCreator.toTest("页面二发送广播通知"));
 }
 ```
 
