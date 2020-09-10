@@ -1827,6 +1827,7 @@ CompPage中，没用到effete这层，就没创建该文件，老规矩，先看
 - state
   - 这地方是非常重要的地方，XxxxConnecto的实现形式是看官方代码写的
   - computed()：该方法是必须实现的，这个类似直接的get()方法，但是切记不能像get()直接返回state.leftAreaState()或state.rightAreaState，某些场景初始化无法刷新，因为是同一个对象，会被判断未更改，所以会不刷新控件
+    - 注意了注意了，这边做了优化，直接返回clone方法，这是对官方赋值写法的一个优化，也可以避免上面说的问题，大家可以想想
   - set()：该方法是Component数据流回推到页面的state，保持俩者state数据一致；如果Component模块更新了自己的State，不写这个方法会报错的
 
 ```dart
@@ -1862,9 +1863,7 @@ class LeftAreaConnector extends ConnOp<CompState, AreaState>
     with ReselectMixin<CompState, AreaState> {
   @override
   AreaState computed(CompState state) {
-    return state.leftAreaState.clone()
-      ..color = state.leftAreaState.color
-      ..text = state.leftAreaState.text;
+    return state.leftAreaState.clone();
   }
 
   @override
@@ -1878,9 +1877,7 @@ class RightAreaConnector extends ConnOp<CompState, AreaState>
     with ReselectMixin<CompState, AreaState> {
   @override
   AreaState computed(CompState state) {
-    return state.rightAreaState.clone()
-      ..color = state.rightAreaState.color
-      ..text = state.rightAreaState.text;
+    return state.rightAreaState.clone();
   }
 
   @override
