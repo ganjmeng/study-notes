@@ -233,10 +233,10 @@ for (var i = 0; i < 10; i++) {
 ```
 
 - 使用
-  - 这地方加不加泛型都是可以的，不加泛型默认为动态类型，item点的时候没有提示，可以凭着自己的记忆写key值，只要是key是对，完全能拿到数据
+  - 这地方指不指定泛型都是可以的，不指定泛型默认为动态类型，item点的时候没有提示，可以凭着自己的记忆写key值，只要是key是对，完全能拿到数据
 
 ```dart
-///加泛型
+///指定泛型
 showBottomSingleDialog<InfoBean>(
     context,
     list: list,
@@ -247,7 +247,7 @@ showBottomSingleDialog<InfoBean>(
     },
 );
 
-///不加泛型
+///不指定泛型
 showBottomSingleDialog(
     context,
     list: list,
