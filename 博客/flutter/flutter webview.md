@@ -140,7 +140,8 @@ java里可以通过泛型+反射；然后指定一个展示的key，理论上也
 
 **实现步骤**
 
-- 数据源定义为List<dynamic>类型，然后指定一个展示的key
+- 数据源定义为List<E>类型，然后指定一个展示的key
+  - 泛型不指定的话，会默认为动态类型，这样的话，便有了很大的操作空间
 - 遍历这个List，然后拿到遍历列表时的实体
 - **将实体转换成Map类型，通过指定的key，获取展示内容就行了**
 - 回调时，传出来选的实体就ok，似不似很简单
@@ -160,39 +161,41 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/Picker.dart';
 
-typedef ParamSingleCallback = void Function(dynamic data);
+typedef ParamSingleCallback<E> = Void Function(E data);
 
-void showBottomSingleDialog(
+void showBottomSingleDialog<E>(
     BuildContext context, {
-        @required List<dynamic> list,
-        @required ParamSingleCallback callback,
+        @required List<E> list,
+        @required ParamSingleCallback<E> callback,
         String title = '请选择',
         String showKey = '',
     }) {
-    List<PickerItem<dynamic>> pickList = [];
-    for (dynamic item in list) {
+    List<PickerItem<E>> pickList = [];
+    for (E item in list) {
         String showContent;
         if (showKey == '') {
             //兼容泛型为String的情况
-            showContent = item;
+            showContent = item as String;
         } else {
             //将实体转成map，通过设置的key指定展示的字段
-            dynamic map = json.decode(jsonEncode(item));
+            var map = json.decode(jsonEncode(item));
             showContent = map[showKey];
         }
 
         pickList.add(
-            PickerItem(text: Text(showContent),value: item),
+            PickerItem(
+                text: Text(showContent),
+                value: item,
+            ),
         );
     }
 
     Picker(
-        adapter: PickerDataAdapter<dynamic>(data: pickList),
+        adapter: PickerDataAdapter<E>(data: pickList),
         hideHeader: false,
         title: Text(title),
         cancelText: "取消",
         confirmText: "确定",
-        textStyle: KoalaTextStyles.colorBlackFont28,
         onConfirm: (Picker picker, List value) async {
             //必须做一个延时操作,先执行回调内部的pop,不然pop页面无法回传值
             await Future.delayed(Duration(milliseconds: 10));
@@ -208,31 +211,43 @@ void showBottomSingleDialog(
 
 ```dart
 class InfoBean {
-  String name;
-  int id;
+    String name;
+    int id;
 
-  InfoBean({this.id, this.name});
+    InfoBean({this.id, this.name});
 
-  /// jsonDecode(jsonStr) 方法中会调用实体类的这个方法。如果实体类中没有这个方法，会报错。
-  Map toJson() {
-    Map map = Map();
-    map["name"] = this.name;
-    map["id"] = this.id;
-    return map;
-  }
+    /// jsonDecode(jsonStr) 方法中会调用实体类的这个方法。如果实体类中没有这个方法，会报错。
+    Map toJson() {
+        Map map = Map();
+        map["name"] = this.name;
+        map["id"] = this.id;
+        return map;
+    }
 }
 
 ///创建数据源
-var list = [];
+List<InfoBean> list = [];
 for (var i = 0; i < 10; i++) {
     list.add(InfoBean(name: "姓名-$i", id: i));
 }
 ```
 
 - 使用
+  - 这地方加不加泛型都是可以的，不加泛型默认为动态类型，item点的时候没有提示，可以凭着自己的记忆写key值，只要是key是对，完全能拿到数据
 
 ```dart
-///使用
+///加泛型
+showBottomSingleDialog<InfoBean>(
+    context,
+    list: list,
+    showKey: 'name',
+    callback: (item) {
+        print(item.name);
+        print(item.id);
+    },
+);
+
+///不加泛型
 showBottomSingleDialog(
     context,
     list: list,
