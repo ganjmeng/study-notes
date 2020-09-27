@@ -118,8 +118,9 @@ json_annotation: ^2.4.0 #json序列化和反序列化用的
   - A ---> B（A跳转到B，并传值给B页面）
   - B ---> A（B返回到A，并返回值给A页面）
 - 列表文章
-  - 网络请求数据，列表加载
-  - fish_redux在ListView中使用
+  - 列表展示-网络请求
+  - 列表修改-单item刷新
+  - 多样式列表
 - 全局模块
   - 全局切换主题
 - 全局模式优化
@@ -912,7 +913,6 @@ class ListItemAdapter extends SourceFlowAdapter<ListState> {
   - state文件中的代码需要做一些调整，需要继承相应的类，和adapter建立起关联
   - ListState需要继承MutableSource；还必须定义一个泛型是item的ItemState类型的List，这俩个是必须的；然后实现相应的抽象方法就行了
   - 这里只要向items里写入ItemState的数据，列表就会更新了
-  - **注意：**如果使用多样式，items的列表泛型不要写成ItemState，写成Object就行了；在下面代码，我们可以看到，实现的getItemData()方法返回的类型是Object，所以Items的列表泛型写成Object，是完全可以的
 
 ```dart
 class ListState extends MutableSource implements Cloneable<ListState> {
@@ -1255,6 +1255,50 @@ ItemState _onChange(ItemState state, Action action) {
   return state;
 }
 ```
+
+### 多样式列表
+
+**注意：**如果使用多样式，items的列表泛型不要写成ItemState，写成Object就行了；在下面代码，我们可以看到，实现的getItemData()方法返回的类型是Object，所以Items的列表泛型写成Object，是完全可以的。
+
+- 我们定义数据源的时候把泛型写成Object是完全可以的，但是初始化数据的时候一定要注意，写成对应adapter类型里面的state
+- 假设一种情况，在index是奇数时展示：OneComponent；在index是奇数时展示：TwoComponent；
+  - getItemType：这个重写方法里面，在index为奇偶数时分别返回：OneComponent和TwoComponent的标识
+  - 数据赋值时也一定要在index为奇偶数时赋值泛型分别为：OneState和TwoState
+- 也可以这样优化去做，在getItemType里面判断当前泛型是什么数据类型，然后再返回对应的XxxxComponent的标识
+- 数据源的数据类型必须和getItemType返回的XxxxComponent的标识相对应，如果数据源搞成Object类型，映射到对应位置的item数据时，会报类型不适配的错误
+
+**下述代码可做思路参考**
+
+```dart
+class ListState extends MutableSource implements Cloneable<PackageCardState> {
+    List<Object> items;
+
+    @override
+    ListState clone() {
+        return PackageCardState()..items = items;
+    }
+
+    @override
+    Object getItemData(int index) => items[index];
+
+    @override
+    String getItemType(int index) {
+        if(items[index] is OneState) {
+            return PackageCardAdapter.itemStyleOne;
+        }else{
+            return PackageCardAdapter.itemStyleTwo;
+        }
+    }
+
+    @override
+    int get itemCount => items.length;
+
+    @override
+    void setItemData(int index, Object data) => items[index] = data;
+}
+```
+
+
 
 ### 搞定
 
