@@ -1298,7 +1298,105 @@ class ListState extends MutableSource implements Cloneable<PackageCardState> {
 }
 ```
 
+### 列表存在的问题
 
+#### 列表多item刷新问题
+
+这里搞定了单item刷新场景，还存在一种多item刷新的场景
+
+- 说明下，列表item是没办法一次刷新多个item的，只能一次刷新一个item（一个clone对应着一次刷新），一个事件对应着刷新一个item；这边是打印多个日志分析出来了
+- 解决：解决办法是，多个事件去处理刷新操作
+
+举例：假设一种场景，对于上面的item只能单选，一个item项被选中，其它item状态被重置到未选状态，具体效果看下方效果图
+
+- 效果图
+
+![单选模式](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20200928134810.gif)
+
+- 这种效果的实现非常简单，但是如果思路不对，会掉进坑里出不来
+
+- 还原被选的状态，不能在同一个事件里写，需要新写一个清除事件
+
+**下述代码为整体流程**
+
+- view
+
+```dart
+Widget buildView(ItemState state, Dispatch dispatch, ViewService viewService) {
+  return InkWell(
+    onTap: () {},
+    child: ListTile(
+      title: Text(state.title),
+      trailing: Checkbox(
+        value: state.itemStatus,
+        ///CheckBox的点击操作：状态变更
+        onChanged: (value) {
+          //单选模式,清除选中的item,以便做单选
+          dispatch(ItemActionCreator.clear());
+
+          //刷新选中item
+          dispatch(ItemActionCreator.onChange(state.id));
+        }
+      ),
+    ),
+  );
+}
+```
+
+- action
+
+```dart
+enum ItemAction {
+  onChange,
+  clear,
+}
+
+class ItemActionCreator {
+  //状态改变
+  static Action onChange(int id) {
+    return Action(ItemAction.onChange, payload: id);
+  }
+
+  //清除改变的状态
+  static Action clear() {
+    return Action(ItemAction.clear);
+  }
+}
+```
+
+- reducer
+
+```dart
+Reducer<ItemState> buildReducer() {
+  return asReducer(
+    <Object, Reducer<ItemState>>{
+      ItemAction.onChange: _onChange,
+      ItemAction.clear: _clear,
+    },
+  );
+}
+
+ItemState _onChange(ItemState state, Action action) {
+  if (state.id == action.payload) {
+    return state.clone()..itemStatus = !state.itemStatus;
+  }
+
+  ///这地方一定要注意，要返回:state；不能返回:state.clone()，否则会造成后续更新失灵
+  return state;
+}
+
+///单选模式
+ItemState _clear(ItemState state, Action action) {
+  if (state.itemStatus) {
+    return state.clone()..itemStatus = false;
+  }
+
+  ///这地方一定要注意，要返回:state；不能返回:state.clone()，否则会造成后续更新失灵
+  return state;
+}
+```
+
+这个问题实际上解决起来很简单，但是如果一直在 _onChange 方法重置状态，你会发现和你预期的结果一直对不上；完整且详细的效果，可以去看demo里面代码
 
 ### 搞定
 
