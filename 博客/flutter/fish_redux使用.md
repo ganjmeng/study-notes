@@ -121,6 +121,7 @@ json_annotation: ^2.4.0 #json序列化和反序列化用的
   - 列表展示-网络请求
   - 列表修改-单item刷新
   - 多样式列表
+  - 列表存在的问题+解决方案
 - 全局模块
   - 全局切换主题
 - 全局模式优化
@@ -1298,7 +1299,7 @@ class ListState extends MutableSource implements Cloneable<PackageCardState> {
 }
 ```
 
-### 列表存在的问题
+### 列表存在的问题+解决方案
 
 #### 列表多item刷新问题
 
