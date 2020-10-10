@@ -2,15 +2,19 @@
 
 ## 前言
 
-首先，有很多的文章在说flutter bloc模式的应用，但是百分之八九十的文章都是在说，使用StreamController+StreamBuilder搭建bloc，提升性能的会加上InheritedWidget，这些文章看了很多，真正写使用bloc作者开发的flutter_bloc却少之又少。没办法，只能去bloc的github上去找使用方式，最后去bloc官网翻文档。
-蛋痛，各位叼毛，就不能好好说说flutter_bloc的使用吗？非要各种抄bloc模式提出作者的那俩篇文章。现在，搞的杂家这个伸手党要自己去翻文档总结（手动滑稽）。
+- 首先，有很多的文章在说flutter bloc模式的应用，但是百分之八九十的文章都是在说，使用StreamController+StreamBuilder搭建bloc，提升性能的会加上InheritedWidget，这些文章看了很多，真正写使用bloc作者开发的flutter_bloc却少之又少。没办法，只能去bloc的github上去找使用方式，最后去bloc官网翻文档。
+
+- 蛋痛，各位叼毛，就不能好好说说flutter_bloc的使用吗？非要各种抄bloc模式提出作者的那俩篇文章。现在，搞的杂家这个伸手党要自己去翻文档总结（手动滑稽）。
+
 ![表情1](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20200804152051.png)
 
 **项目效果（建议PC浏览器打开）**
 
-- [http://cnad666.gitee.io/book_web_manage](http://cnad666.gitee.io/book_web_manage)
+- [Bloc范例效果](http://cnad666.gitee.io/book_web_manage)
 
-**来来，伸手党们，赶紧保存下面的链接**
+- [Cubit范例效果](https://cnad666.gitee.io/flutter_use/#/)
+
+**下面是Flutter_Bloc历程的一系列链接**
 
 - [Flutter_Bloc起源](https://www.didierboelens.com/2018/08/reactive-programming-streams-bloc/)
 
@@ -43,16 +47,16 @@
 
 - OK，大家要是想知道全场景的使用，可以去官网翻翻文档，我觉得学习一个模式或者框架的时候，最主要的是把主流程跑通，起码可以符合标准的堆页面，这样的话，就可以把这玩意用起来，再遇到想要的什么细节，就可以自己去翻文档，毕竟大体上已经懂了，写过了几个页面，也有些体会，再去翻文档就很快能理解了。
 
-#### 库
+### 库
 
 ```dart
-flutter_bloc: ^6.0.1 #状态管理框架
+flutter_bloc: ^6.0.6 #状态管理框架
 equatable: ^1.2.3 #增强组件相等性判断
 ```
 
 - 看看flutter_bloc都推到6.0了，别再用StreamController手搭Bloc了！
 
-#### 插件
+### 插件
 
 在Android Studio设置的Plugins里，搜索：Bloc
 
@@ -68,7 +72,7 @@ equatable: ^1.2.3 #增强组件相等性判断
 
 - 是不是觉得，还在手动新建这些bloc文件low爆了；就好像fish_redux，不用插件，让我手动去创建那六个文件，写那些模板代码，真的要原地爆炸。
 
-## 范例
+## Bloc范例
 
 ### 初始化代码
 
@@ -341,7 +345,7 @@ Widget navigationRailSide() {
 }
 ```
 
-## 范例优化
+## Bloc范例优化
 
 ### 反思
 
@@ -449,7 +453,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   - view层代码太多，这边只增加了个初始化事件，就不重新把全部代码贴出来了，初始化操作直接在创建的时候，在XxxBloc上使用add()方法就行了，就能起到进入页面，初始化一次的效果；add()方法也是Bloc类中提供的，遍历事件的时候，就特地检查了add()这个方法是否添加了事件；说明，这是框架特地提供了一个初始化的方法
   - 这个初始化方式是在官方示例找到的
     - 项目名：Flutter Infinite List Tutorial
-    - 项目地址：[https://bloclibrary.dev/#/flutterinfinitelisttutorial?id=flutter-infinite-list-tutorial](https://bloclibrary.dev/#/flutterinfinitelisttutorial?id=flutter-infinite-list-tutorial)
+    - 项目地址：[flutter-infinite-list-tutorial](https://bloclibrary.dev/#/flutterinfinitelisttutorial?id=flutter-infinite-list-tutorial)
 
 ```dart
 class MainPage extends StatelessWidget {
@@ -465,19 +469,162 @@ class MainPage extends StatelessWidget {
 ///下方其余代码省略...........
 ```
 
-## 搞定
+### 搞定
 
 - OK，经过这样的优化，解决了几个痛点。实际在view中反复是要用BlocBuilder去更新view，写起来有点麻烦，这里我们可以写一个，将其中state和context变量，往提出来的Widget方法传值，也是蛮不错的
 - 大家保持观察者模式的思想就行了；观察者（回调刷新控件）和被观察者（产生相应事件，添加事件，去通知观察者），bloc层是处于观察者和被观察者中间的一层，我们可以在bloc里面搞业务，搞逻辑，搞网络请求，不能搞基；拿到Event事件传递过来的数据，把处理好的、符合要求的数据返回给view层的观察者就行了。
 - 使用框架，不拘泥框架，在观察者模式的思想上，灵活的去使用flutter_bloc提供Api，这样可以大大的缩短我们的开发时间！
 
+
+
+## Cubit范例
+
+- Cubit是Bloc模式的一种简化版，去掉了event这一层，对于简单的页面，用Cubit来实现，开发体验是大大的好啊，下面介绍下该种模式的写法
+
+### 创建
+
+- 首先创建Cubit一组文件，选择“Cubit Class”，点击，新建名称填写：Counter
+
+![image-20201010155420462](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20201010165016.png)
+
+新建好后，他会生成俩个文件：counter_cubit，counter_state，来看下生成的代码
+
+#### 原始生成代码
+
+- counter_cubit
+
+```dart
+class CounterCubit extends Cubit<CounterState> {
+  CounterCubit() : super(CounterInitial());
+}
+```
+
+- counter_state
+
+```dart
+@immutable
+abstract class CounterState {}
+
+class CounterInitial extends CounterState {}
+```
+
+按照生成的这种state方式去写，比较麻烦，这边调整下
+
+#### 调整后代码
+
+- counter_cubit
+
+```dart
+class CounterCubit extends Cubit<CounterState> {
+  CounterCubit() : super(CounterState().init());
+}
+```
+
+- counter_state
+
+```dart
+class CounterState {
+  ///初始化方法
+  CounterState init() {
+    return CounterState();
+  }
+
+  ///克隆方法,针对于刷新界面数据
+  CounterState clone() {
+    return CounterState();
+  }
+}
+```
+
+OK，这样调整了下，下面写起来就会舒服很多，也会很省事
+
+### 实现计时器
+
+- 来实现下一个灰常简单的计数器
+
+#### 效果
+
+- 来看下实现效果吧，这边不上图了，大家点击下面的链接，可以直接体验Cubit模式写的计时器
+- 实现效果：[点我体验实际效果](https://cnad666.gitee.io/flutter_use/#/counter)
+
+#### 实现
+
+实现很简单，三个文件就搞定，看下流程：state ->  cubit -> view
+
+- state：这个很简单，加个计时变量
+
+```dart
+class CounterState {
+  int count;
+
+  CounterState init() {
+    return CounterState()..count = 0;
+  }
+
+  CounterState clone() {
+    return CounterState()..count = count;
+  }
+}
+```
+
+- cubit
+  - 这边加了个自增方法：increase()
+  - event层实际是所有行为的一种整合，方便对逻辑过于复杂的页面，所有行为的一种维护；但是过于简单的页面，就那么几个事件，还单独维护，就没什么必要了
+  - 在cubit层写的公共方法，在view里面能直接调用，更新数据使用：emit()
+  - cubit层应该可以算是：bloc层和event层一种结合后的简写
+
+```dart
+class CounterCubit extends Cubit<CounterState> {
+  CounterCubit() : super(CounterState().init());
+
+  ///自增
+  void increase() => emit(state.clone()..count = ++state.count);
+}
+```
+
+- view
+  - view层的代码就非常简单了，点击方法里面调用cubit层的自增方法就ok了
+
+```dart
+class CounterPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (BuildContext context) => CounterCubit(),
+      child: BlocBuilder<CounterCubit, CounterState>(builder: _counter),
+    );
+  }
+
+  Widget _counter(BuildContext context, CounterState state) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Cubit范例')),
+      body: Center(
+        child: Text('点击了 ${state.count} 次', style: TextStyle(fontSize: 30.0)),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.bloc<CounterCubit>().increase(),
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+```
+
+### 总结
+
+在Bloc模式里面，如果页面不是过于复杂，使用Cubit去写，基本完全够用了；但是如果业务过于复杂，还是需要用Bloc去写，需要将所有的事件行为管理起来，便于后期维护
+
+OK，Bloc的简化模块，Cubit模式就这样讲完了，对于自己业务写的小项目，我就经常用这个Cubit去写
+
 ## 最后
 
 - Bloc还有很多Api针对不同的场景非常的实用，例如：MultiBlocProvider，BlocListener，MultiBlocListener，BlocConsumer等等，这里面有些Api和Provider的Api是非常相似的，例如MultiXxxxx，这都是为了减少嵌套，提供多个全局Bloc而提供，大家可以去瞧瞧看，用法也都非常的相似
-- 项目代码地址
-  - [https://github.com/CNAD666/book_web_manage](https://github.com/CNAD666/book_web_manage)
+- Cubit范例代码地址
+  - [Cubit范例代码](https://github.com/CNAD666/ExampleCode/tree/master/Flutter/flutter_use)
+- Bloc范例代码地址
+  - [Bloc范例代码](https://github.com/CNAD666/book_web_manage)
 - flutter_bloc相关Api白嫖地址
-  - [https://bloclibrary.dev/#/flutterbloccoreconcepts?id=bloc-widgets](https://bloclibrary.dev/#/flutterbloccoreconcepts?id=bloc-widgets)
+  - [flutter_bloc相关Api](https://bloclibrary.dev/#/flutterbloccoreconcepts?id=bloc-widgets)
 - flutter_redux
   - GitHub：[https://github.com/felangel/bloc](https://github.com/felangel/bloc)
   - Pub：[https://pub.dev/packages/flutter_bloc](https://pub.dev/packages/flutter_bloc)

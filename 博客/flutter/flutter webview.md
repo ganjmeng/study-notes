@@ -259,8 +259,16 @@ showBottomSingleDialog(
 );
 ```
 
+- 效果试用
+  - [https://cnad666.gitee.io/flutter_use/#/dialog](https://cnad666.gitee.io/flutter_use/#/dialog)
 - 效果图
 
 ![image-20200922194205445](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20200922194702.png)
 
 ![image-20200922194356028](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20200922194711.png)
+
+## 最后
+
+**代码地址**
+
+- Github：[范例项目代码地址](https://github.com/CNAD666/ExampleCode/tree/master/Flutter/flutter_use)
