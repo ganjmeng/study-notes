@@ -2187,6 +2187,53 @@ void _receiveNotify(Action action, Context<FirstState> ctx) async {
 
 **注意：** 广播发送和接受是一对多的关系，一处发送，可以在多处接受；和dispatch发送事件，如果在effect里面接受，在reducer就无法接受的情况是不一样的（被拦截了）
 
+
+
+## 开发小技巧
+
+### 弱化reducer
+
+**无限弱化了reducer层作用**
+
+- 在日常使用fish_redux和flutter_bloc后，实际能深刻体会reducer层实际上只是相当于bloc中yield
+      或emit关键字的作用，职能完全可以弱化为，仅仅作为状态刷新；这样可以大大简化开发流程，只需要关注
+      view -> action -> effect (reducer：使用统一的刷新事件)
+- 下面范例代码，处理数据的操作直接在effect层处理，如需要更改数据，直接对ctx.state进行操作，涉及刷新页面的操作，统一调用onRefresh事件；对于一个页面有几十个表单的情况，这种操作，能大大提升你的开发速度和体验，亲身体验，大家可以尝试下
+
+```dart
+Reducer<TestState> buildReducer() {
+  return asReducer(
+    <Object, Reducer<TestState>>{
+      TestAction.onRefresh: _onRefresh,
+    },
+  );
+}
+
+TestState _onRefresh(TreeState state, Action action) {
+  return state.clone();
+}
+```
+
+
+
+- 具体可以查看 [玩android ](https://github.com/CNAD666/flutter_wan) 项目代码；花了一些时间，把玩android项目代码所有模块全部重构了，肝痛
+
+### widget组合式开发
+
+**说明**
+
+这种开发形式，可以说是个惯例，在android里面是封装一个个View，View里有对应的一套，逻辑自洽的功能，然后在主xm里面组合这些View；这种思想完全可以引申到Flutter里，而且，开发体验更上几百层楼，让你的widget组合可以更加灵活百变，百变星君
+
+- view模块中，页面使用widget组合的方式去构造的，只传入必要的数据源和保留一些点击回调
+
+- 为什么用widget组合方式构造页面？
+  - 非常复杂的界面，必须将页面分成一个个小模块，然后再将其组合， 每个小模块Widget内部应当对自身的的职能，能逻辑自洽的去处理；这种组合的方式呈现的代码，会非常的层次分明，不会让你的代码写着写着，突然就变成shit
+- 组合widget关键点
+  - 一般来说，我们并不关注widget内部页面的实现，只需要关心的是widget需要的数据源， 以及widget对交互的反馈；例如：我点击widget后，widget回调事件，并传达一些数据给我；至于内部怎么实现， 外部并不关心，请勿将dispatch传递到封装的widget内部，这会使我们关注的事件被封装在内部
+- 具体请查看 [玩android ](https://github.com/CNAD666/flutter_wan) 项目代码
+
+
+
 ## 最后
 
 - 这片文章，说实话，花了不少精力去写的，也花了不少时间构思；主要是例子，必须要自己重写下，反复思考例子是否合理等等，头皮微凉。
