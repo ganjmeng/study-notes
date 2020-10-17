@@ -622,7 +622,7 @@ OK，Bloc的简化模块，Cubit模式就这样讲完了，对于自己业务写
 - Cubit范例代码地址
   - [Cubit范例代码](https://github.com/CNAD666/ExampleCode/tree/master/Flutter/flutter_use)
 - Bloc范例代码地址
-  - [Bloc范例代码](https://github.com/CNAD666/book_web_manage)
+  - [Bloc范例代码](https://github.com/CNAD666/book_manage)
 - flutter_bloc相关Api白嫖地址
   - [flutter_bloc相关Api](https://bloclibrary.dev/#/flutterbloccoreconcepts?id=bloc-widgets)
 - flutter_bloc
