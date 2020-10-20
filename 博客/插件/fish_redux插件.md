@@ -50,3 +50,53 @@
 ![image-20201020113821316](../../../资料/图片/image-20201020113821316.png)
 
 - Gradle模块开发插件，设置运行项就非常简单；OK，大功告成，可以直接运行了
+
+## 控件使用
+
+### dialog
+
+- dialog这个控件在DSL中的用法，有个ok回调参数，我觉得有必要好好讲讲，坑死爷了
+  - 这个用法都是我看源码边猜边试，成功蒙出来的；马丹，文档里面都没dialog的用法说明
+
+```kotlin
+private fun showDialog() {
+    dialog(
+        title = "Fish Redux Code Generation",
+        panel = panel{
+            titledRow("帅比") {
+                row("Select  Module") {
+                    label(text = "我是大帅比")
+                }
+            }
+        },
+        ok = {
+            //点击OK按钮会调用该回调
+            //Messages.showMessageDialog("Hello World !", "测试", Messages.getInformationIcon())
+
+            //是否满足条件关闭ok弹窗
+            isCanClose()
+        }
+    ).show()
+}
+
+private fun isCanClose(): List<ValidationInfo> {
+    val list = ArrayList<ValidationInfo>()
+
+    val isAccess = 2
+    if (isAccess == 1) {
+        //点击确定按钮不会消失,且提示相关内容
+        list.add(ValidationInfo("测试OK回调"))
+        list.add(ValidationInfo("Please input module name"))
+    }
+
+    //list未添加元素，弹窗会直接关闭，可以进行后续逻辑操作
+    return  list
+}
+```
+
+- 参数说明
+  - title：弹窗顶部的的标题
+  - panel：整体布局样式，用panel作为最外层，然后去堆就行了
+  - ok：这个回调参数的使用，真是把我猜的头疼，试了好多遍，终于对比出来了，点击OK按钮有俩种情况
+    - 点击OK按钮，弹窗不消失：这种一般是检测到缺少相关数据，需要提示用户输入某些数据，不能让弹窗消失，这里初始化一个泛型为ValidationInfo的list，添加一些ValidationInfo对象，里面表明一些提示即可
+    - 点击OK按钮，弹窗消失：满足条件，关闭弹窗，不填加ValidationInfo对象即可，如果添加了，点击OK时，弹窗就不会消失，切记
