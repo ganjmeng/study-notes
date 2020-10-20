@@ -129,6 +129,11 @@ json_annotation: ^2.4.0 #json序列化和反序列化用的
 - Component使用
   - page中使用component
 - 广播
+- 开发小技巧
+  - 弱化reducer
+  - widget组合式开发
+
+
 
 ## 计数器
 
