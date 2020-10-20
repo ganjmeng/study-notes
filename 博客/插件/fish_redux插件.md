@@ -64,14 +64,14 @@ private fun showDialog() {
         title = "Fish Redux Code Generation",
         panel = panel{
             titledRow("帅比") {
-                row("Select  Module") {
+                row("Select  ShuaiBi") {
                     label(text = "我是大帅比")
                 }
             }
         },
         ok = {
             //点击OK按钮会调用该回调
-            //Messages.showMessageDialog("Hello World !", "测试", Messages.getInformationIcon())
+            //Messages.showMessageDialog("Hello World !", "Test", Messages.getInformationIcon())
 
             //是否满足条件关闭ok弹窗
             isCanClose()
