@@ -166,7 +166,11 @@ class IsExtendEvent extends MainEvent{
 ```
 
 - main_state：state有很多种写法，在bloc官方文档上，不同项目state的写法也很多
+  
   - 这边变量名可以设置为私用，用get和set可选择性的设置读写权限，因为我这边设置的俩个变量全是必用的，读写均要，就设置公有类型，不用下划线“_”去标记私有了。
+  - 对于生成的模板代码，我们在这：去掉@immutable注解，去掉abstract；
+  
+  - 这里说下加上@immutable和abstract的作用，这边是为了标定不同状态，这种写法，会使得代码变得更加麻烦，用state不同状态去标定业务事件，代价太大，这边用一个变量去标定，很容易轻松代替
 
 ```dart
 class MainState{
@@ -175,52 +179,6 @@ class MainState{
   
    MainState({this.selectedIndex, this.isExtended});
 }
-```
-
-- 对于生成的模板代码，我们在这：去掉@immutable注解，去掉abstract；
-  - 这里说下加上@immutable和abstract的作用，这边是为了标定不同状态，拿很典型的列表数据加载说明，列表加载的时候一般有三种状态
-    - 获取数据前，列表的布局展示空样式：LoadingBeforeState
-    - 获取数据失败，显示出加载失败的布局，或提升重新加载的样式提升：LoadingFailureState
-    - 获取数据成功，显示出列表数据：LoadingSuccessState
-  - 针对上面三种状态，需要展示不同的布局，这样我们就可以继承抽象的状态类：LoadingState，针对不同状态实现上面三种不同的状态类，不同的状态可以定义不同的参数，然后在view中去判断调用
-  - 这种实现不同状态，对不同状态进行管理，有点设计模式中-状态模式的味道
-- 下面代码是对上述描述的一种代码展示，可以瞧瞧；跑demo的时候，这下面的代码就不用抄了，仅做演示
-
-```dart
-@immutable
-abstract class LoadingState extends Equatable {}
-class LoadingInitial extends LoadingState {
-  @override
-  List<Object> get props => [];
-}
-class LoadingBeforeSate extends LoadingState{
-  ///实现相应的字段信息
-  @override
-  List<Object> get props => [];
-}
-class LoadingFailureState extends LoadingState{
-  ///实现相应的字段信息
-  @override
-  List<Object> get props => [];
-}
-class LoadingSuccessState extends LoadingState{
-  ///实现相应的字段信息
-  @override
-  List<Object> get props => [];
-}
-
-///在View中使用,伪代码
-BlocBuilder<MainBloc, MainState>(builder: (context, state) {
-  if(state is LoadingBeforeSate){
-	return Beforewidget(state.XX,..);
-  } else if(state is LoadingFailureState){
-    return FailureWidget(state.XX,state.XX,...);
-  } else if(state is LoadingSuccessState){
-    return SuccessWidget(state.XX);
-  } else {
-    return ErrorWidget(...);
-  }
-})
 ```
 
 - main_view
