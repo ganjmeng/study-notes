@@ -110,13 +110,34 @@ WebView(
 
 - ok，搞定
 
-## 补充
+## 补充（弹窗封装，优化列表数据源）
 
 - **就这么点内容就水了一片文章，显得我是个水笔，为了证明我不是个水笔，再补充个开发小技巧**
 
 ***
 
-### 弹窗封装，优化列表数据源
+### 效果
+
+- 来看下封装后的使用
+- 数据源List的泛型可以随意，showKey是你指定显示在弹窗列表上的字段
+
+```
+showBottomSingleDialog(
+    context,
+    list: list,
+    showKey: 'name',
+    callback: (item) {
+        print(item.name);
+        print(item.id);
+    },
+);
+```
+
+- 效果图
+
+![image-20200922194205445](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20200922194702.png)
+
+![image-20200922194356028](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20200922194711.png)
 
 ### 说明
 
@@ -261,13 +282,8 @@ showBottomSingleDialog(
 
 - 效果试用
   - [https://cnad666.gitee.io/flutter_use/#/dialog](https://cnad666.gitee.io/flutter_use/#/dialog)
-- 效果图
 
-![image-20200922194205445](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20200922194702.png)
-
-![image-20200922194356028](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20200922194711.png)
-
-## 最后
+### 最后
 
 **代码地址**
 
