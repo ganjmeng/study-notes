@@ -6,6 +6,63 @@
 
 个人觉得，这是一个很常见的现象，不知道为啥，很多人在说明Future用法的时候，都没提到这个场景，奇怪+懵逼，只能自己去苟解决方案了。
 
+## 实现
+
+`不多哔哔，先看实现，赶时间的靓仔，可以直接忽略掉历程描述`
+
+- 记录下Callback to Future的写法，使用Completer类即可
+
+```dart
+class ViewUtil {
+  ///界面初始化完成
+  static Future<Void> initFinish() async {
+    Completer<Void> completer = Completer();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      completer.complete();
+    });
+
+    return completer.future;
+  }
+}
+```
+
+- 使用
+  - 使用起来，瞬间简单很多
+
+```dart
+void _init() async {
+    await ViewUtil.initFinish();
+    ///下面可以使用加载弹窗
+}
+```
+
+**说明**
+
+- Future<T>和Completer<T>的泛型最好保持一致
+  - 例如都是String的话，complete()方法里面就可以加上相应的内容，然后await接受这个方法时候，就能拿到complete()方法里面输入的值了
+
+```dart
+class ViewUtil {
+    ///界面初始化完成
+    static Future<String> initFinish() async {
+        Completer<String> completer = Completer();
+
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+            completer.complete("测试一下...");
+        });
+
+        return completer.future;
+    }
+}
+
+
+void _init() async {
+    var s = await ViewUtil.initFinish();
+    print(s);
+}
+```
+
 ## 历程
 
 - 为什么我要将Callback转成Future方法？
@@ -91,63 +148,8 @@ factory Future.delayed(Duration duration, [FutureOr<T> computation()?]) {
 
 ![image-20201023143143286](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20201023144306.png)
 
-- 然后成功找到这个：https://medium.com/@brianschardt/dart-turn-callback-function-into-a-future-95f54431936b
+- 然后成功找到这个：[Dart: Turn Callback Functions into a Futures! 2018, Flutter!!](https://medium.com/@brianschardt/dart-turn-callback-function-into-a-future-95f54431936b)
   - 言简意赅，简洁明了
 
 ![img](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20201023144318.jpg)
-
-## 解决方案
-
-- 记录下Callback to Future的写法，很简单，使用Completer类即可
-
-```dart
-class ViewUtil {
-  ///界面初始化完成
-  static Future<Void> initFinish() async {
-    Completer<Void> completer = Completer();
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      completer.complete();
-    });
-
-    return completer.future;
-  }
-}
-```
-
-- 使用
-  - 使用起来，瞬间简单很多
-
-```dart
-void _init() async {
-    await ViewUtil.initFinish();
-    ///下面可以使用加载弹窗
-}
-```
-
-**说明**
-
-- Future<T>和Completer<T>的泛型最好保持一致
-  - 例如都是String的话，complete()方法里面就可以加上相应的内容，然后await接受这个方法时候，就能拿到complete()方法里面输入的值了
-
-```dart
-class ViewUtil {
-    ///界面初始化完成
-    static Future<String> initFinish() async {
-        Completer<String> completer = Completer();
-
-        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            completer.complete("测试一下...");
-        });
-
-        return completer.future;
-    }
-}
-
-
-void _init() async {
-    var s = await ViewUtil.initFinish();
-    print(s);
-}
-```
 
