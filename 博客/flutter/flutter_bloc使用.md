@@ -50,7 +50,7 @@
 ### 库
 
 ```dart
-flutter_bloc: ^6.0.6 #状态管理框架
+flutter_bloc: ^6.1.1 #状态管理框架
 equatable: ^1.2.3 #增强组件相等性判断
 ```
 
@@ -258,7 +258,7 @@ Widget navigationRailSide() {
         return FloatingActionButton(
           onPressed: () {
             ///添加NavigationRail展开,收缩事件
-            context.bloc<MainBloc>().add(IsExtendEvent());
+            BlocProvider.of<MainBloc>(context).add(IsExtendEvent());
           },
           ///看这看这：刷新组件！
           child: Icon(state.isExtended ? Icons.send : Icons.navigation),
@@ -296,7 +296,7 @@ Widget navigationRailSide() {
       selectedIndex: state.selectedIndex,
       onDestinationSelected: (int index) {
         ///添加切换tab事件
-        context.bloc<MainBloc>().add(SwitchTabEvent(selectedIndex: index));
+        BlocProvider.of<MainBloc>(context).add(SwitchTabEvent(selectedIndex: index));
       },
     );
   });
@@ -560,7 +560,7 @@ class CounterPage extends StatelessWidget {
         child: Text('点击了 ${state.count} 次', style: TextStyle(fontSize: 30.0)),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.bloc<CounterCubit>().increase(),
+        onPressed: () => BlocProvider.of<CounterCubit>(context).increase(),
         child: const Icon(Icons.add),
       ),
     );
