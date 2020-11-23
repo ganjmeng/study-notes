@@ -1,15 +1,13 @@
-# 一文总结设计模式
-
-## 前言
+# 前言
 
 - 看了很多寓教于学写设计模式的，看的有点头疼，注意力全都在故事上了，满脑子都是鸭子，餐厅之类，还有一堆和设计模式不相关的话，翻书都翻的挺累的。
 - 这里我整理了下23种设计模式，`没什么多余的话，代码演示，简单粗暴`，借鉴的地方都附上了参考链接（做个优秀的搬运工），没附上的是自己总结的。
 - 借鉴的例子代码，基本都做了一些精简，`如果相关例子写的有什么不准确，麻烦在评论里面指出来，最好附上代码，我会尽快修改文章中的相关实例`。
 - 23种设计模式，一文呈现，方便大家和自己查询，也方便自己随时修改，请配合文章旁边的大纲食用。
 
-## 总述
+# 总述
 
-### 7种面向对象设计原则
+## 7种面向对象设计原则
 
 | **设计原则名称**                                   | **定 义**                                        |
 | -------------------------------------------------- | ------------------------------------------------ |
@@ -30,9 +28,9 @@
 
 ![image](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/thought/20201123103552.png)
 
-### 原则简述
+## 原则简述
 
-#### 1. 单一职责原则
+### 1. 单一职责原则
 
 **定义**：一个类只有一个引起它变化的原因。
 
@@ -40,7 +38,7 @@
 
 **举例**：就比如一个网络请求框架大体分为：请求类，缓存类，配置类，不能把这3个混在一起，必须分为3个类去实现不同的功能。
 
-#### 2.开闭原则
+### 2.开闭原则
 
 **定义**：一个实体（类、函数、模块等）应该对外扩展开放，对内修改关闭
 
@@ -48,7 +46,7 @@
 
 **举例**：就比如在软件的生命周期内，因为产品迭代，软件升级维护等原因，需要对原有代码进行修改时，可能会给原有代码引入错误，也可能使得我们对整个功能不得不进行重构，并且需要对原有代码进行重新测试，这样的话，对开发周期影响很大，所以开闭原则刚好解决这个问题。
 
-#### 3. 里氏替换原则
+### 3. 里氏替换原则
 
 **定义**：继承必须确保超类所拥有的性质在子类中仍然成立。
 
@@ -56,7 +54,7 @@
 
 **举例**：你看啊，就比如Object有个方法，叫equals，如果不遵守里氏代替原则，它的子类重载了equals这个方法，并且返回了个null，这个子类的下一个继承者也会返回null，那么，在不同开发人员开发时，可能考虑不到这个问题，那么就可能导致程序崩溃。
 
-#### 4.迪米特法则
+### 4.迪米特法则
 
 **定义**：一个模块或对象应尽量少的与其他实体之间发生相互作用，使得系统功能模块相对独立，这样当一个模块修改时，影响的模块就会越少，扩展起来更加容易。
 
@@ -64,7 +62,7 @@
 
 **举例**：一般在使用框架的时候，框架的开发者会抽出一个类供外部调用，而这个主要的类像是一个中介一样去调用框架里面的其他类，恰恰框架里面其他类一般都是不可访问（调用）的，这个框架就遵守了迪米特原则，其他开发人员只关心调用的方法，并不需要关心功能具体如何实现。
 
-#### 5.接口隔离原则
+### 5.接口隔离原则
 
 **定义**：使用多个专门功能的接口，而不是使用单一的总接口
 
@@ -72,7 +70,7 @@
 
 **举例**：在实际开发中，往往为了节省时间，可能会将多个功能的方法抽成一个接口，其实这设计理念不正确的，这样会使接口处于臃肿的状态，这时就需要合理的拆分接口中的方法，另外抽取成一个独立的接口，避免原有的接口臃肿导致代码理解困难。
 
-#### 6.依赖倒置原则
+### 6.依赖倒置原则
 
 **定义**：细节应该依赖于抽象，而抽象不应该依赖于细节
 
@@ -80,7 +78,7 @@
 
 **举例**：比如说我们写一个网络框架，为了满足不同开发者的需求，即能使用高效的OkHttp框架，也可以使用原生的API。那么是如何进行切换的呢，这个时候需要面向接口编程思想了，把一些网络请求的方法封装成一个接口，然后分别创建OkHttp和原生API的接口实现类，当然也可以扩展其他网络框架的应用。
 
-#### 7.合成复用原则
+### 7.合成复用原则
 
 **定义**：尽量使用对象组合，而不是继承来达到复用的目的。
 
@@ -93,9 +91,9 @@
 - https://blog.csdn.net/lovelion/article/details/7536532
 - https://juejin.im/post/5d8861f45188250970131f41
 
-## 创建型模式
+# 创建型模式
 
-### 单例模式
+## 单例模式
 
 **饿汉模式**
 
@@ -113,7 +111,7 @@ public class Singleton {
 }
 ```
 
-- 在未使用该类的时候，也会实例化对象，会造成资源浪费，除非在一定会用到某种类的场景，否在不建议使用。
+- 在未使用该类的时候，也会实例化对象，会造成资源浪费，除非在一定会用到该种类的场景，否则不建议使用。
 
 **懒汉模式**
 
@@ -180,9 +178,9 @@ public enum Singleton {
 - https://blog.csdn.net/zhangerqing/article/details/8194653
 - https://www.cnblogs.com/happy4java/p/11206105.html
 
-### 工厂模式
+## 工厂模式
 
-#### 简单工厂模式
+### 简单工厂模式
 
 - 以手机为例来说明
 - 定义一个接口，开机的时候，手机界面上，会显示该手机系统
@@ -251,7 +249,7 @@ public void test() {
 
 - 结果显示：Android  IOS
 
-#### 工厂模式
+### 工厂模式
 
 - 工厂模式区别与简单工厂模式的是，工厂模式不是用一个统一的工厂类来管理所有对象，而是每一个对象都有不同的工厂相对应。
 - 继续以手机为例说明，需要针对Android和IOS手机这俩个实现类，去构建不同的工厂，这边用接口去规范不同的工厂类
@@ -300,7 +298,7 @@ public void test() {
 
 - 结果显示：Android  IOS
 
-### 抽象工厂模式
+## 抽象工厂模式
 
 - 抽象模式是对工厂模式的进一步优化，工厂类不单单只能创建一个对象，而是能创建一组对象。
 - 在这里，大家可能存在一个疑惑，简单工厂不也是创建一组对象吗？是的，在这点上，俩者是非常非常相似的，区别在于：简单工厂模式是外部传值进去，以获取不同对象；抽象工厂模式直接通过方法获取对象，不需要传值。
@@ -391,7 +389,7 @@ public static void test() {
 
 - 结果显示：IOS
 
-### 建造者模式
+## 建造者模式
 
 **说明**
 
@@ -464,11 +462,11 @@ Computer computer = new Computer.Builder("因特尔","三星")
 
 - https://zhuanlan.zhihu.com/p/58093669
 
-### 原型模式
+## 原型模式
 
 **定义**
 
-原型模式(Prototype  Pattern)：使用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。原型模式是一种对象创建型模式。
+- 原型模式(Prototype  Pattern)：使用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。原型模式是一种对象创建型模式。
 
 **实现**
 
@@ -523,13 +521,13 @@ class SerializableObject implements Serializable {
 
 - https://blog.csdn.net/zhangerqing/article/details/8194653
 
-## 结构型模式
+# 结构型模式
 
-### 适配器模式
+## 适配器模式
 
-#### 类适配
+### 类适配
 
-有一个已存在的将被适配的类
+- 有一个已存在的将被适配的类
 
 ```java
 public class Adaptee {
@@ -539,7 +537,7 @@ public class Adaptee {
 }
 ```
 
-定义一个目标接口
+- 定义一个目标接口
 
 ```java
 public interface Target {
@@ -547,9 +545,8 @@ public interface Target {
 }
 ```
 
-怎么才可以在目标接口中的 request() 调用 Adaptee 的 adapteeRequest() 方法呢？
-
-通过一个适配器类，实现 Target 接口，同时继承了 Adaptee 类，然后在实现的 request() 方法中调用父类的 adapteeRequest() 即可实现
+- 怎么才可以在目标接口中的 request() 调用 Adaptee 的 adapteeRequest() 方法呢？
+  - 通过一个适配器类，实现 Target 接口，同时继承了 Adaptee 类，然后在实现的 request() 方法中调用父类的 adapteeRequest() 即可实现
 
 ```java
 public class Adapter extends Adaptee implements Target{
@@ -561,7 +558,7 @@ public class Adapter extends Adaptee implements Target{
 }
 ```
 
-测试一下
+- 测试一下
 
 ```java
 public class Test {
@@ -572,16 +569,16 @@ public class Test {
 }
 ```
 
-输出
+- 输出
 
 ```java
 concreteTarget目标方法
 被适配者的方法
 ```
 
-#### 对象适配
+### 对象适配
 
-电源适配器：定义输出交流电接口，输出220V交流电类
+- 电源适配器：定义输出交流电接口，输出220V交流电类
 
 ```java
 public interface AC {
@@ -598,7 +595,7 @@ public class AC220 implements AC {
 }
 ```
 
-适配器接口，outputDC5V() 方法则用于将输入的电压变换为 5V 后输出
+- 适配器接口，outputDC5V() 方法则用于将输入的电压变换为 5V 后输出
 
 ```java
 public interface DC5Adapter {
@@ -606,7 +603,7 @@ public interface DC5Adapter {
 }
 ```
 
-实现电源适配器
+- 实现电源适配器
 
 ```java
 public class PowerAdapter implements DC5Adapter {
@@ -624,7 +621,7 @@ public class PowerAdapter implements DC5Adapter {
 }
 ```
 
-使用
+- 使用
 
 ```java
 public class Test {
@@ -638,15 +635,15 @@ public class Test {
 }
 ```
 
-输出
+- 输出
 
 ```java
 使用PowerAdapter变压适配器，输入AC:220V，输出DC:5V
 ```
 
-#### 接口适配
+### 接口适配
 
-在实际开发中，经常会遇到接口中定义了太多的方法，以致于有时我们在一些实现类中并不是都需要
+- 在实际开发中，经常会遇到接口中定义了太多的方法，以致于有时我们在一些实现类中并不是都需要
 
 ```java
 public interface Sourceable {
@@ -655,7 +652,7 @@ public interface Sourceable {
 }
 ```
 
-抽象类Wrapper：
+- 抽象类Wrapper：
 
 ```java
 public abstract class Wrapper implements Sourceable{
@@ -664,7 +661,7 @@ public abstract class Wrapper implements Sourceable{
 }
 ```
 
-可选择的去实现，我们想要的方法
+- 可选择的去实现，我们想要的方法
 
 ```java
 public class SourceSub extends Wrapper {
@@ -680,7 +677,7 @@ public class SourceSub extends Wrapper {
 - https://juejin.im/post/5ba28986f265da0abc2b6084#heading-7
 - https://blog.csdn.net/zhangerqing/article/details/8239539
 
-### 装饰模式
+## 装饰模式
 
 **定义**
 
@@ -731,7 +728,7 @@ public abstract class ShapeDecorator implements Shape {
 }
 ```
 
-- - 测试
+- 测试
 
 ```java
 public class Test {
@@ -770,7 +767,7 @@ Border Color: Red
 
 - https://www.runoob.com/design-pattern/decorator-pattern.html
 
-### 代理模式
+## 代理模式
 
 **定义**
 
@@ -835,7 +832,7 @@ Shape: Circle
 
 - https://blog.csdn.net/zhangerqing/article/details/8239539
 
-### 外观模式
+## 外观模式
 
 **定义**
 
@@ -933,7 +930,7 @@ disk shutdown!
 
 - https://blog.csdn.net/zhangerqing/article/details/8239539
 
-### 桥接模式
+## 桥接模式
 
 **定义**
 
@@ -1022,7 +1019,7 @@ Drawing Circle, color: green
 - https://blog.csdn.net/zhangerqing/article/details/8239539
 - https://www.runoob.com/design-pattern/bridge-pattern.html
 
-### 组合模式
+## 组合模式
 
 **定义**
 
@@ -1105,14 +1102,14 @@ Employee :[ Name : Richard, dept : Sales, salary :10000 ]
 
 - https://www.runoob.com/design-pattern/composite-pattern.html
 
-### 享元模式
+## 享元模式
 
 **定义**
 
 - 享元模式（Flyweight Pattern）主要用于减少创建对象的数量，以减少内存占用和提高性能。这种类型的设计模式属于结构型模式，它提供了减少对象数量从而改善应用所需的对象结构的方式。
 - 享元模式尝试重用现有的同类对象，如果未找到匹配的对象，则创建新对象。
 
-#### 典型享元模式
+### 典型享元模式
 
 - 典型享元类（享元：Flyweight，w不是大写）
 
@@ -1151,7 +1148,7 @@ class FlyweightFactory {
 }
 ```
 
-#### 通用写法
+### 通用写法
 
 - 解决某些场景频繁生成实例问题；使用泛型，节省写判断逻辑
 
@@ -1183,7 +1180,7 @@ private <T> T classicFlyweight(Class<T> clazz) {
 }
 ```
 
-#### 连接池的实现
+### 连接池的实现
 
 - 数据库连接池
 - 通过连接池的管理，实现了数据库连接的共享，不需要每一次都重新创建连接，节省了数据库重新创建的开销，提升了系统的性能！
@@ -1241,11 +1238,11 @@ public class ConnectionPool {
 - https://juejin.im/post/5ba9ff4b6fb9a05d0f16df6a
 - https://blog.csdn.net/zhangerqing/article/details/8239539
 
-## 行为型模式
+# 行为型模式
 
-### 思考
+## 思考
 
-#### 策略模式和状态模式
+### 策略模式和状态模式
 
  **相同点**
 
@@ -1258,7 +1255,7 @@ public class ConnectionPool {
 - 策略模式中每个行为或算法之间没有关联；
 - 状态模式中的状态之间有关联，并且状态本身控制着状态转移；
 
-### 解释器模式
+## 解释器模式
 
 **定义**
 
@@ -1362,7 +1359,7 @@ Julie is a married women? true
 
 - https://www.runoob.com/design-pattern/interpreter-pattern.html
 
-### 状态模式
+## 状态模式
 
 **定义**
 
@@ -1458,7 +1455,7 @@ Stop State
 
 - https://www.runoob.com/design-pattern/state-pattern.html
 
-### 策略模式
+## 策略模式
 
 **定义**
 
@@ -1541,7 +1538,7 @@ public class Test{
 
 - https://www.jianshu.com/p/d0c1b312d563
 
-### 观察者模式
+## 观察者模式
 
 **定义**
 
@@ -1551,7 +1548,7 @@ public class Test{
 
 - 抽象观察者接口（Observer）
 
-- - 为所有的具体观察者定义一个接口，在得到主题通知时更新自己。
+  - 为所有的具体观察者定义一个接口，在得到主题通知时更新自己。
 
 ```java
 public interface Observer {
@@ -1562,7 +1559,7 @@ public interface Observer {
 
 - 抽象主题接口（Subject）
 
-- - 它把所有观察者对象的引用保存到一个聚集里，每个主题都可以有任何数量的观察者。抽象主题提供一个接口，可以增加和删除观察者对象，以及通知所有观察者。
+  - 它把所有观察者对象的引用保存到一个聚集里，每个主题都可以有任何数量的观察者。抽象主题提供一个接口，可以增加和删除观察者对象，以及通知所有观察者。
 
 ```java
 public interface Subject {
@@ -1577,7 +1574,7 @@ public interface Subject {
 
 - 观察者接口实现类
 
-- - 实现抽象观察者角色所要求的更新接口，以便使本身的状态与主题状态保持一致。
+  - 实现抽象观察者角色所要求的更新接口，以便使本身的状态与主题状态保持一致。
 
 ```java
 public class TestObserver implements Observer{
@@ -1596,7 +1593,7 @@ public class TestObserver implements Observer{
 
 - 主题接口实现类
 
-- - 将有关状态存入具体观察者对象；当具体主题内部状态放生改变时，通知所有注册过的观察者。
+  - 将有关状态存入具体观察者对象；当具体主题内部状态放生改变时，通知所有注册过的观察者。
 
 ```java
 public class TestSubject implements Subject{
@@ -1643,7 +1640,7 @@ public class TestMain {
 
 ![image.png](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/thought/20201123123446.png)
 
-### 中介者模式
+## 中介者模式
 
 **定义**
 
@@ -1711,7 +1708,7 @@ Thu Jan 31 16:05:46 IST 2013 [John] : Hello! Robert!
 
 - https://www.runoob.com/design-pattern/mediator-pattern.html
 
-### 备忘录模式
+## 备忘录模式
 
 **定义**
 
@@ -1811,7 +1808,7 @@ public class Test {
 
 - https://blog.csdn.net/zhangerqing/article/details/8245537
 
-### 命令模式
+## 命令模式
 
 **定义**
 
@@ -1902,7 +1899,7 @@ Stock [ Name: ABC, Quantity: 10 ] bought
 
 - https://www.runoob.com/design-pattern/command-pattern.html
 
-### 责任链模式
+## 责任链模式
 
 **定义**
 
@@ -2015,7 +2012,7 @@ Standard Console::Logger: This is an error information.
 
 - https://www.runoob.com/design-pattern/chain-of-responsibility-pattern.html
 
-### 访问者模式
+## 访问者模式
 
 **定义**
 
@@ -2089,7 +2086,7 @@ public class Test {
 
 - https://blog.csdn.net/zhangerqing/article/details/8245537
 
-### 迭代器模式
+## 迭代器模式
 
 **定义**
 
@@ -2170,7 +2167,7 @@ Name : Lora
 
 - https://www.runoob.com/design-pattern/iterator-pattern.html
 
-### 模板模式
+## 模板模式
 
 **定义**
 
@@ -2242,7 +2239,7 @@ Football Game Finished!
 
 - https://www.runoob.com/design-pattern/template-pattern.html
 
-## 最后
+# 最后
 
 - 文章源码：[一文总结设计模式](https://github.com/CNAD666/study-notes/blob/master/%E5%8D%9A%E5%AE%A2/%E6%80%9D%E6%83%B3/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F)
   - 提供良好的搬运格式，搬运使用时，请附上引用出处
