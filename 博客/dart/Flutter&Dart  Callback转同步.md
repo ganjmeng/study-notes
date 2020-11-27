@@ -1,5 +1,3 @@
-# Flutter&Dart  Callback转同步
-
 ## 前言
 
 **怎么将一个Callback回调转化成Future同步方法（Callback to Future），可以配套async / await去使用呢？**

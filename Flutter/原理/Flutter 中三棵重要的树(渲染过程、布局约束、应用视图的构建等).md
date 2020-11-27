@@ -44,15 +44,15 @@ Flutter 的渲染过程由用户的输入开始，当接受到用户输入的信
 
 每次，当控件挂载到控件树上时，Flutter 调用其 createElement() 方法，创建其对应的 Element。Flutter 再将这个 Element 放到元素树上，并持有创建它控件的引用，如下图：
 
-![img](https://cdn.jsdelivr.net/gh/meandni/blogimg@main/img/2020-10-11-element-3845797.svg)
+![img](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/copy/20201124155533.png)
 
 控件会有它的子树：
 
-![img](https://cdn.jsdelivr.net/gh/meandni/blogimg@main/img/2020-10-11-element2.svg)
+<img src="https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/copy/20201124155621.png" alt="img"  />
 
 子控件也会创建相应 Element 被放在元素树上：
 
-![img](https://cdn.jsdelivr.net/gh/meandni/blogimg@main/img/2020-10-11-element3.svg)
+<img src="https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/copy/20201124155624.png" alt="img"  />
 
 ### Element 中的状态
 

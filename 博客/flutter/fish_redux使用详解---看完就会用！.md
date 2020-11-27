@@ -1,5 +1,3 @@
-## fish_redux使用详解---看完就会用！
-
 **说句心里话，这篇文章，来来回回修改了很多次，如果认真看完这篇文章，还不会写fish_redux，请在评论里喷我。**
 
 ## 前言
@@ -1264,7 +1262,7 @@ ItemState _onChange(ItemState state, Action action) {
 
 ### 多样式列表
 
-**注意：**如果使用多样式，items的列表泛型不要写成ItemState，写成Object就行了；在下面代码，我们可以看到，实现的getItemData()方法返回的类型是Object，所以Items的列表泛型写成Object，是完全可以的。
+**注意**：如果使用多样式，items的列表泛型不要写成ItemState，写成Object就行了；在下面代码，我们可以看到，实现的getItemData()方法返回的类型是Object，所以Items的列表泛型写成Object，是完全可以的。
 
 - 我们定义数据源的时候把泛型写成Object是完全可以的，但是初始化数据的时候一定要注意，写成对应adapter类型里面的state
 - 假设一种情况，在index是奇数时展示：OneComponent；在index是奇数时展示：TwoComponent；

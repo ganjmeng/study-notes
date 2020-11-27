@@ -1,5 +1,3 @@
-# flutter_bloc使用解析---骚年，你还在手搭bloc吗！
-
 ## 前言
 
 - 首先，有很多的文章在说flutter bloc模式的应用，但是百分之八九十的文章都是在说，使用StreamController+StreamBuilder搭建bloc，提升性能的会加上InheritedWidget，这些文章看了很多，真正写使用bloc作者开发的flutter_bloc却少之又少。没办法，只能去bloc的github上去找使用方式，最后去bloc官网翻文档。

@@ -1,5 +1,3 @@
-# Flutter Webview添加Cookie的正确姿势
-
 ## 场景
 
 h5页面要从cookie里面取数据，所以需要在flutter webview的cookie里面塞一些数据，设置的数据多达十几条；按照网上查的使用方式来设置，通过fiddler抓包发现，只能生效一条，来来回回试了很多次都只有一条，心态崩了
