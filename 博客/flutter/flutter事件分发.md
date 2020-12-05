@@ -15,7 +15,7 @@ AbsorbPointer(
     absorbing: true,
     child: Listener(
         onPointerDown: (event){
-            LogUtil.log('+++++++++++++++++++++++++++++++++');
+            print('+++++++++++++++++++++++++++++++++');
         },
     )
 )
@@ -31,7 +31,7 @@ IgnorePointer(
     ignoring: true,
     child: Listener(
         onPointerDown: (event){
-            LogUtil.log('----------------------------------');
+            print('----------------------------------');
         },
     )
 )
