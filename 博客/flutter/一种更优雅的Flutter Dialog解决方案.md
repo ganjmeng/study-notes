@@ -104,6 +104,7 @@ SmartDialog.show(
 
 - SmartDialog配置参数说明
   - 为了避免`instance`里面暴露过多属性，导致使用不便，此处诸多参数使用`instance`中的`config`属性管理
+  - 使用config设置的属性都是全局的，将这些属性单独使用Config管理，是为了方便修改和管理这些属性，也是为了使SmartDialog类更易维护
 
 | 参数              | 功能说明                                                     |
 | ----------------- | ------------------------------------------------------------ |
@@ -116,6 +117,22 @@ SmartDialog.show(
 | isLoading         | 默认：true；是否使用Loading动画；true:内容体使用渐隐动画  false：内容体使用缩放动画，仅仅针对中间位置的控件 |
 | isExist           | 默认：false；主体SmartDialog（OverlayEntry）是否存在在界面上 |
 | isExistExtra      | 默认：false；额外SmartDialog（OverlayEntry）是否存在在界面上 |
+
+- Config属性使用，举个栗子
+  - 内部已初始化相关属性；如果需要定制，可在主入口处，初始化自己想要的属性
+
+```dart
+SmartDialog.instance.config
+    ..clickBgDismiss = true
+    ..isLoading = true
+    ..isUseAnimation = true
+    ..animationDuration = Duration(milliseconds: 270)
+    ..isPenetrate = true
+    ..maskColor = Colors.black.withOpacity(0.1)
+    ..isExist = false
+    ..isExistExtra = false
+    ..alignment = Alignment.center;
+```
 
 - **返回事件，关闭弹窗解决方案**
 
