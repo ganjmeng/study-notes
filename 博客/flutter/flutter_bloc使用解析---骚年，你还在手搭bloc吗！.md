@@ -1,4 +1,4 @@
-## 前言
+# 前言
 
 - 首先，有很多的文章在说flutter bloc模式的应用，但是百分之八九十的文章都是在说，使用StreamController+StreamBuilder搭建bloc，提升性能的会加上InheritedWidget，这些文章看了很多，真正写使用bloc作者开发的flutter_bloc却少之又少。没办法，只能去bloc的github上去找使用方式，最后去bloc官网翻文档。
 
@@ -24,14 +24,14 @@
 
   前面三个，是bloc作者写的bloc模式文档，典型的观察者模式的应用，最原始的就是java中CallBack形式。前俩篇文章就是咱们这些大抄子的主要“参考”的资料来源，这三篇文章在掘金上有翻译版，搜下bloc就能找到。最后一篇文章就是我主要总结归纳的源泉，作者在官网上写了好几个demo：计时器，登录，Todos，天气等等，大家可以自己去看看。
 
-### 问题
+## 问题
 
 初次使用flutter_bloc框架，可能会有几个疑问
 
 - state里面定义了太多变量，某个事件只需要更新其中一个变量，其它的变量赋相同值麻烦
 - 进入某个模块，进行初始化操作：复杂的逻辑运算，网络请求等，入口在哪定义
 
-## 效果
+# 效果
 
 - 好了，哔哔了一堆，看下咱们要用flutter_bloc实现的效果。
 
@@ -41,11 +41,10 @@
 
 ## 引用
 
-- 先说明下，bloc给的api很多，不同的api针对与解决场景不同，我要是把官网那些api全抄过也没啥意义；不，也有可能可以装币，我要是不说明，大家说不定以为是我自己总结的呢！哈哈。
+- 我觉得学习一个模式或者框架的时候，最主要的是把主流程跑通，起码可以符合标准的堆页面，这样的话，就可以把这玩意用起来，再遇到想要的什么细节，就可以自己去翻文档，毕竟大体上已经懂了，写过了几个页面，也有些体会，再去翻文档就很快能理解了
+- 实际上Bloc给的API也不多，就几个API，相关API使用说明都写在文章最后（机翻过来的）
 
-- OK，大家要是想知道全场景的使用，可以去官网翻翻文档，我觉得学习一个模式或者框架的时候，最主要的是把主流程跑通，起码可以符合标准的堆页面，这样的话，就可以把这玩意用起来，再遇到想要的什么细节，就可以自己去翻文档，毕竟大体上已经懂了，写过了几个页面，也有些体会，再去翻文档就很快能理解了。
-
-### 库
+## 库
 
 ```dart
 flutter_bloc: ^6.1.1 #状态管理框架
@@ -54,7 +53,7 @@ equatable: ^1.2.3 #增强组件相等性判断
 
 - 看看flutter_bloc都推到6.0了，别再用StreamController手搭Bloc了！
 
-### 插件
+## 插件
 
 在Android Studio设置的Plugins里，搜索：Bloc
 
@@ -70,9 +69,9 @@ equatable: ^1.2.3 #增强组件相等性判断
 
 - 是不是觉得，还在手动新建这些bloc文件low爆了；就好像fish_redux，不用插件，让我手动去创建那六个文件，写那些模板代码，真的要原地爆炸。
 
-## Bloc范例
+# Bloc范例
 
-### 初始化代码
+## 初始化代码
 
 来看下这三个生成的bloc文件：main_bloc，main_event，main_state
 
@@ -108,7 +107,7 @@ abstract class MainState {}
 class MainInitial extends MainState {}
 ```
 
-### 实现
+## 实现
 
 - 说明
   - 这里对于简单的页面，state的使用抽象状态继承实现的方式，未免有点麻烦，这里我进行一点小改动，state的实现类别有很多，官网写demo也有不用抽象类，直接class，类似实体类的方式开搞的。
@@ -301,9 +300,9 @@ Widget navigationRailSide() {
 }
 ```
 
-## Bloc范例优化
+# Bloc范例优化
 
-### 反思
+## 反思
 
 从上面的代码来看，实际存在几个隐式问题，这些问题，刚开始使用时候，没异常的感觉，但是使用bloc久了后，感觉肯定越来越强烈
 
@@ -313,7 +312,7 @@ Widget navigationRailSide() {
 - bloc问题
   - 如果进行一个页面，需要进行复杂的运算或者请求接口后，才能知晓数据，进行赋值，这里肯定需要一个初始化入口，初始化入口需要怎样去定义呢？
 
-### 优化实现
+## 优化实现
 
 这边完整走一下流程，让大家能有个完整的思路
 
@@ -425,19 +424,17 @@ class MainPage extends StatelessWidget {
 ///下方其余代码省略...........
 ```
 
-### 搞定
+## 搞定
 
 - OK，经过这样的优化，解决了几个痛点。实际在view中反复是要用BlocBuilder去更新view，写起来有点麻烦，这里我们可以写一个，将其中state和context变量，往提出来的Widget方法传值，也是蛮不错的
 - 大家保持观察者模式的思想就行了；观察者（回调刷新控件）和被观察者（产生相应事件，添加事件，去通知观察者），bloc层是处于观察者和被观察者中间的一层，我们可以在bloc里面搞业务，搞逻辑，搞网络请求，不能搞基；拿到Event事件传递过来的数据，把处理好的、符合要求的数据返回给view层的观察者就行了。
 - 使用框架，不拘泥框架，在观察者模式的思想上，灵活的去使用flutter_bloc提供Api，这样可以大大的缩短我们的开发时间！
 
-
-
-## Cubit范例
+# Cubit范例
 
 - Cubit是Bloc模式的一种简化版，去掉了event这一层，对于简单的页面，用Cubit来实现，开发体验是大大的好啊，下面介绍下该种模式的写法
 
-### 创建
+## 创建
 
 - 首先创建Cubit一组文件，选择“Cubit Class”，点击，新建名称填写：Counter
 
@@ -445,7 +442,7 @@ class MainPage extends StatelessWidget {
 
 新建好后，他会生成俩个文件：counter_cubit，counter_state，来看下生成的代码
 
-#### 原始生成代码
+### 原始模板代码
 
 - counter_cubit
 
@@ -466,7 +463,7 @@ class CounterInitial extends CounterState {}
 
 按照生成的这种state方式去写，比较麻烦，这边调整下
 
-#### 调整后代码
+### 模板代码优化
 
 - counter_cubit
 
@@ -494,16 +491,16 @@ class CounterState {
 
 OK，这样调整了下，下面写起来就会舒服很多，也会很省事
 
-### 实现计时器
+## 实现计时器
 
 - 来实现下一个灰常简单的计数器
 
-#### 效果
+**效果**
 
 - 来看下实现效果吧，这边不上图了，大家点击下面的链接，可以直接体验Cubit模式写的计时器
 - 实现效果：[点我体验实际效果](https://cnad666.gitee.io/flutter_use/#/counter)
 
-#### 实现
+**实现**
 
 实现很简单，三个文件就搞定，看下流程：state ->  cubit -> view
 
@@ -572,9 +569,325 @@ class CounterPage extends StatelessWidget {
 
 OK，Bloc的简化模块，Cubit模式就这样讲完了，对于自己业务写的小项目，我就经常用这个Cubit去写
 
-## 最后
+# 全局Bloc
 
-- Bloc还有很多Api针对不同的场景非常的实用，例如：MultiBlocProvider，BlocListener，MultiBlocListener，BlocConsumer等等，这里面有些Api和Provider的Api是非常相似的，例如MultiXxxxx，这都是为了减少嵌套，提供多个全局Bloc而提供，大家可以去瞧瞧看，用法也都非常的相似
+## 场景
+
+**什么是全局Bloc？**
+
+- BlocProvider介绍里面有这样的形容：BlocProvider should be used to create new blocs which will be made available to the rest of the subtree（BlocProvider应该被用于创建新的Bloc，这些Bloc将可用于其子树）
+- 这样的话，我们只需要在主入口地方使用BlocProvider创建Bloc，就能使用全局的XxxBloc了，这里的全局XxxBloc，state状态都会被保存的，除非关闭app，否则state里面的数据都不会被还原！
+- **注意**：在主入口创建的XxxBloc，在主入口处创建了一次，在其它页面均不需要再次创建，在任何页面只需要使用BlocBuilder，便可以定点刷新及其获取全局XxxBloc的state数据
+
+**使用场景**
+
+- 全局的主题色，字体样式和大小等等全局配置更改；这种情况，在需要全局属性的地方，使用BlocBuilder对应的全局XxxBloc泛型去刷新数据就行了
+- 跨页面去调用事件，既然是全局的XxxBloc，这就说明，我们可以在任何页面，使用` BlocProvider.of<XxxBloc>(context)`调用全局XxxBloc中事件，这就起到了一种跨页面调用事件的效果
+  - 使用全局Bloc做跨页面事件时，应该明白，当你关闭Bloc对应的页面，对应全局Bloc中的并不会被回收，下次进入页面，页面的数据还是上次退出页面修改的数据，这里应该使用StatefulWidget，在initState生命周期处，初始化数据；或者在dispose生命周期处，还原数据源
+  - 思考下：全局Bloc对象存在周期是在整个App存活周期，必然不能创建过多的全局Bloc，跨页面传递事件使用全局Bloc应当只能做折中方案
+
+# Bloc API说明
+
+## BlocBuilder
+
+**BlocBuilder**是Flutter窗口小部件，需要`Bloc`和`builder`函数。`BlocBuilder`处理构建小部件以响应新状态。`BlocBuilder`与非常相似，`StreamBuilder`但具有更简单的API，可以减少所需的样板代码量。该`builder`函数可能会被多次调用，并且应该是一个纯函数，它会根据状态返回小部件。
+
+看看`BlocListener`是否要响应状态更改“执行”任何操作，例如导航，显示对话框等。
+
+如果省略cubit参数，`BlocBuilder`将使用`BlocProvider`和当前函数自动执行查找`BuildContext`。
+
+```dart
+BlocBuilder<BlocA, BlocAState>(
+  builder: (context, state) {
+    // return widget here based on BlocA's state
+  }
+)
+```
+
+仅当您希望提供一个范围仅限于单个窗口小部件且无法通过父级`BlocProvider`和当前类访问的bloc时，才指定该bloc `BuildContext`。
+
+```dart
+BlocBuilder<BlocA, BlocAState>(
+  cubit: blocA, // provide the local cubit instance
+  builder: (context, state) {
+    // return widget here based on BlocA's state
+  }
+)
+```
+
+为了对何时`builder`调用该函数进行细粒度的控制，`buildWhen`可以提供一个可选的选项。`buildWhen`获取先前的块状态和当前的块状态并返回一个布尔值。如果`buildWhen`返回true，`builder`将使用进行调用，`state`并且小部件将重新生成。如果`buildWhen`返回false，`builder`则不会调用`state`且不会进行重建。
+
+```dart
+BlocBuilder<BlocA, BlocAState>(
+  buildWhen: (previousState, state) {
+    // return true/false to determine whether or not
+    // to rebuild the widget with state
+  },
+  builder: (context, state) {
+    // return widget here based on BlocA's state
+  }
+)
+```
+
+## BlocProvider
+
+**BlocProvider**是Flutter小部件，可通过为其子**元素**提供块`BlocProvider.of<T>(context)`。它用作依赖项注入（DI）小部件，以便可以将一个块的单个实例提供给子树中的多个小部件。
+
+在大多数情况下，`BlocProvider`应使用它来创建新的bloc，这些bloc将可用于其余子树。在这种情况下，由于`BlocProvider`负责创建块，它将自动处理关闭bloc。
+
+```dart
+BlocProvider(
+  create: (BuildContext context) => BlocA(),
+  child: ChildA(),
+);
+```
+
+默认情况下，`BlocProvider`将懒惰地创建bloc，这意味着`create`当通过查找块时将执行该bloc `BlocProvider.of<BlocA>(context)`。
+
+要覆盖此行为并强制`create`立即运行，`lazy`可以将其设置为`false`。
+
+```dart
+BlocProvider(
+  lazy: false,
+  create: (BuildContext context) => BlocA(),
+  child: ChildA(),
+);
+```
+
+在某些情况下，`BlocProvider`可用于向小部件树的新部分提供现有的bloc。当需要将现有bloc用于新路线时，这将是最常用的。在这种情况下，`BlocProvider`由于不会创建bloc，因此不会自动关闭该bloc。
+
+```dart
+BlocProvider.value(
+  value: BlocProvider.of<BlocA>(context),
+  child: ScreenA(),
+);
+```
+
+然后从`ChildA`或`ScreenA`中检索`BlocA`：
+
+```dart
+// with extensions
+context.read<BlocA>();
+
+// without extensions
+BlocProvider.of<BlocA>(context)复制到剪贴板错误复制的
+```
+
+## MultiBlocProvider
+
+**MultiBlocProvider**是Flutter小部件，可将多个`BlocProvider`小部件合并为一个。 `MultiBlocProvider`提高了可读性，消除了嵌套多个元素的需求`BlocProviders`。通过使用，`MultiBlocProvider`我们可以从：
+
+```dart
+BlocProvider<BlocA>(
+  create: (BuildContext context) => BlocA(),
+  child: BlocProvider<BlocB>(
+    create: (BuildContext context) => BlocB(),
+    child: BlocProvider<BlocC>(
+      create: (BuildContext context) => BlocC(),
+      child: ChildA(),
+    )
+  )
+)
+```
+
+至：
+
+```dart
+MultiBlocProvider(
+  providers: [
+    BlocProvider<BlocA>(
+      create: (BuildContext context) => BlocA(),
+    ),
+    BlocProvider<BlocB>(
+      create: (BuildContext context) => BlocB(),
+    ),
+    BlocProvider<BlocC>(
+      create: (BuildContext context) => BlocC(),
+    ),
+  ],
+  child: ChildA(),
+)
+```
+
+## BlocListener
+
+**BlocListener**是Flutter小部件，它带有`BlocWidgetListener`和可选，`Bloc`并调用，`listener`以响应bloc中的状态变化。它应用于需要在每次状态更改时发生一次的功能，例如导航，显示a `SnackBar`，显示a`Dialog`等。
+
+```
+listener`与in和函数不同，每次状态更改（**不**包括初始状态）仅被调用一次。`builder``BlocBuilder``void
+```
+
+如果省略cubit参数，`BlocListener`将使用`BlocProvider`和当前函数自动执行查找`BuildContext`。
+
+```dart
+BlocListener<BlocA, BlocAState>(
+  listener: (context, state) {
+    // do stuff here based on BlocA's state
+  },
+  child: Container(),
+)
+```
+
+仅当您希望提供无法通过`BlocProvider`和当前访问的bloc时，才指定该bloc `BuildContext`。
+
+```dart
+BlocListener<BlocA, BlocAState>(
+  cubit: blocA,
+  listener: (context, state) {
+    // do stuff here based on BlocA's state
+  },
+  child: Container()
+)
+```
+
+为了对何时`listener`调用该函数进行细粒度的控制，`listenWhen`可以提供一个可选的选项。`listenWhen`获取先前的bloc状态和当前的bloc状态并返回一个布尔值。如果`listenWhen`返回true，`listener`将使用调用`state`。如果`listenWhen`返回false，`listener`则不会调用`state`。
+
+```dart
+BlocListener<BlocA, BlocAState>(
+  listenWhen: (previousState, state) {
+    // return true/false to determine whether or not
+    // to call listener with state
+  },
+  listener: (context, state) {
+    // do stuff here based on BlocA's state
+  },
+  child: Container(),
+)
+```
+
+## MultiBlocListener
+
+**MultiBlocListener**是Flutter小部件，可将多个`BlocListener`小部件合并为一个。 `MultiBlocListener`提高了可读性，消除了嵌套多个元素的需求`BlocListeners`。通过使用，`MultiBlocListener`我们可以从：
+
+```dart
+BlocListener<BlocA, BlocAState>(
+  listener: (context, state) {},
+  child: BlocListener<BlocB, BlocBState>(
+    listener: (context, state) {},
+    child: BlocListener<BlocC, BlocCState>(
+      listener: (context, state) {},
+      child: ChildA(),
+    ),
+  ),
+)
+```
+
+至：
+
+```dart
+MultiBlocListener(
+  listeners: [
+    BlocListener<BlocA, BlocAState>(
+      listener: (context, state) {},
+    ),
+    BlocListener<BlocB, BlocBState>(
+      listener: (context, state) {},
+    ),
+    BlocListener<BlocC, BlocCState>(
+      listener: (context, state) {},
+    ),
+  ],
+  child: ChildA(),
+)
+```
+
+## BlocConsumer
+
+**BlocConsumer**公开`builder`和`listener`以便对新状态做出反应。`BlocConsumer`与嵌套类似`BlocListener`，`BlocBuilder`但减少了所需的样板数量。`BlocConsumer`仅应在需要重建UI和执行其他对状态更改进行响应的情况下使用`cubit`。`BlocConsumer`取需要`BlocWidgetBuilder`和`BlocWidgetListener`和任选的`cubit`，`BlocBuilderCondition`和`BlocListenerCondition`。
+
+如果`cubit`省略该参数，`BlocConsumer`将使用`BlocProvider`和当前函数自动执行查找 `BuildContext`。
+
+```dart
+BlocConsumer<BlocA, BlocAState>(
+  listener: (context, state) {
+    // do stuff here based on BlocA's state
+  },
+  builder: (context, state) {
+    // return widget here based on BlocA's state
+  }
+)
+```
+
+可选的`listenWhen`，`buildWhen`可以实现，以更精细地控制何时`listener`和`builder`被调用。在`listenWhen`和`buildWhen`将在每个被调用`cubit` `state`的变化。它们各自采用先前的`state`和当前的，`state`并且必须返回a `bool`，以确定是否将调用`builder`and / or`listener`函数。以前`state`会被初始化为`state`的`cubit`的时候`BlocConsumer`被初始化。`listenWhen`并且`buildWhen`是可选的，如果未实现，则默认为`true`。
+
+```dart
+BlocConsumer<BlocA, BlocAState>(
+  listenWhen: (previous, current) {
+    // return true/false to determine whether or not
+    // to invoke listener with state
+  },
+  listener: (context, state) {
+    // do stuff here based on BlocA's state
+  },
+  buildWhen: (previous, current) {
+    // return true/false to determine whether or not
+    // to rebuild the widget with state
+  },
+  builder: (context, state) {
+    // return widget here based on BlocA's state
+  }
+)
+```
+
+## RepositoryProvider
+
+**RepositoryProvider**是Flutter小部件，它通过为其子节点提供存储库`RepositoryProvider.of<T>(context)`。它用作依赖项注入（DI）小部件，以便可以将存储库的单个实例提供给子树中的多个小部件。`BlocProvider`应该用于提供块，而`RepositoryProvider`只能用于存储库。
+
+```dart
+RepositoryProvider(
+  create: (context) => RepositoryA(),
+  child: ChildA(),
+);
+```
+
+然后`ChildA`我们可以通过以下方式检索`Repository`实例：
+
+```dart
+// with extensions
+context.read<RepositoryA>();
+
+// without extensions
+RepositoryProvider.of<RepositoryA>(context)
+```
+
+## MultiRepositoryProvider
+
+**MultiRepositoryProvider**是Flutter小部件，将多个`RepositoryProvider`小部件合并为一个。 `MultiRepositoryProvider`提高了可读性，消除了嵌套多个元素的需求`RepositoryProvider`。通过使用，`MultiRepositoryProvider`我们可以从：
+
+```dart
+RepositoryProvider<RepositoryA>(
+  create: (context) => RepositoryA(),
+  child: RepositoryProvider<RepositoryB>(
+    create: (context) => RepositoryB(),
+    child: RepositoryProvider<RepositoryC>(
+      create: (context) => RepositoryC(),
+      child: ChildA(),
+    )
+  )
+)
+```
+
+至：
+
+```dart
+MultiRepositoryProvider(
+  providers: [
+    RepositoryProvider<RepositoryA>(
+      create: (context) => RepositoryA(),
+    ),
+    RepositoryProvider<RepositoryB>(
+      create: (context) => RepositoryB(),
+    ),
+    RepositoryProvider<RepositoryC>(
+      create: (context) => RepositoryC(),
+    ),
+  ],
+  child: ChildA(),
+)
+```
+
+# 最后
+
 - Cubit范例代码地址
   - [Cubit范例代码](https://github.com/CNAD666/ExampleCode/tree/master/Flutter/flutter_use)
 - Bloc范例代码地址
