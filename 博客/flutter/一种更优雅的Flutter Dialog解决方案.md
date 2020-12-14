@@ -15,7 +15,7 @@
 - 页面顶级使用Stack
 - 使用Overlay
 
-很明显，使用Overlay可移植性最好，目前很多Toast和dialog三方库便是使用该方案，使用了一些loading库，看了其中源码，穿透背景解决方案，和预期想要的效果大相径庭、一些dialog库自带toast显示，但是toast显示却又不能和dialog共存（toast属于特殊的信息展示，理应能独立存在），导致我需要多依赖一个Toast库
+很明显，使用Overlay可移植性最好，目前很多toast和dialog三方库便是使用该方案，使用了一些loading库，看了其中源码，穿透背景解决方案，和预期想要的效果大相径庭、一些dialog库自带toast显示，但是toast显示却又不能和dialog共存（toast属于特殊的信息展示，理应能独立存在），导致我需要多依赖一个Toast库
 
 # SmartDialog
 
@@ -53,10 +53,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: SmartDialogPage(),
       builder: (BuildContext context, Widget child) {
-        return Material(
-          type: MaterialType.transparency,
-          child: FlutterSmartDialog(child: child),
-        );
+        return FlutterSmartDialog(child: child);
       },
     );
   }
