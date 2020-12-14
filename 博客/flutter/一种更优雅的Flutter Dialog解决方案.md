@@ -407,9 +407,20 @@ class TestLayoutPage extends StatelessWidget {
 
 - 如果大家对`返回事件`有什么好的处理思路，麻烦在评论里告知，谢谢！
 
+## 项目地址
+
 FlutterSmartDialog一些信息
 
 - Github：[flutter_smart_dialog](https://github.com/CNAD666/flutter_smart_dialog)
 
 - Pub：[flutter_smart_dialog](https://pub.flutter-io.cn/packages/flutter_smart_dialog)
 - 使用效果体验：[点击体验一下](https://cnad666.github.io/flutter_use/web/index.html#/smartDialog)
+
+## Flutter的状态管理
+
+- 可以看看下面的文章，相信对你应该有所帮助的
+
+[fish_redux使用详解---看完就会用！](https://juejin.cn/post/6860029460524040199)
+
+[flutter_bloc使用解析---骚年，你还在手搭bloc吗！](https://juejin.cn/post/6856268776510504968)
+

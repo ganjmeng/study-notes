@@ -2239,14 +2239,19 @@ TestState _onRefresh(TreeState state, Action action) {
 
 ## 最后
 
+### Demo地址
+
 - 这片文章，说实话，花了不少精力去写的，也花了不少时间构思；主要是例子，必须要自己重写下，反复思考例子是否合理等等，头皮微凉。
-
 - 代码地址：[代码demo地址](https://github.com/CNAD666/ExampleCode/tree/master/Flutter/fish_redux_demo)
-
 - fish_redux版-玩Android：[fish_redux版-玩android](https://github.com/CNAD666/flutter_wan)
-
 - 大家如果觉得有收获，就给我点个赞吧！你的点赞，是我码字的最大动力！
 
-  
-
 ![img](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20200812171815.jpg)
+
+### Flutter状态管理和Dialog问题
+
+- 可以看看下面的文章，相信对你应该有所帮助的
+
+[flutter_bloc使用解析---骚年，你还在手搭bloc吗！](https://juejin.cn/post/6856268776510504968)
+
+[一种更优雅的Flutter Dialog解决方案](https://juejin.cn/post/6902331428072390663)

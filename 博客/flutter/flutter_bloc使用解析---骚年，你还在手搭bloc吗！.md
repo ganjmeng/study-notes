@@ -31,20 +31,14 @@
 - state里面定义了太多变量，某个事件只需要更新其中一个变量，其它的变量赋相同值麻烦
 - 进入某个模块，进行初始化操作：复杂的逻辑运算，网络请求等，入口在哪定义
 
-# 效果
+# 准备工作
 
-- 好了，哔哔了一堆，看下咱们要用flutter_bloc实现的效果。
-
-![bloc演示](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20200804152120.gif)
-
-- 直接开Chrome演示，大家在虚拟机上跑也一样。
-
-## 引用
+**引用**
 
 - 我觉得学习一个模式或者框架的时候，最主要的是把主流程跑通，起码可以符合标准的堆页面，这样的话，就可以把这玩意用起来，再遇到想要的什么细节，就可以自己去翻文档，毕竟大体上已经懂了，写过了几个页面，也有些体会，再去翻文档就很快能理解了
-- 实际上Bloc给的API也不多，就几个API，相关API使用说明都写在文章最后（机翻过来的）
+- 实际上Bloc给的API也不多，就几个API，相关API使用说明都写在文章最后
 
-## 库
+**库**
 
 ```dart
 flutter_bloc: ^6.1.1 #状态管理框架
@@ -53,7 +47,7 @@ equatable: ^1.2.3 #增强组件相等性判断
 
 - 看看flutter_bloc都推到6.0了，别再用StreamController手搭Bloc了！
 
-## 插件
+**插件**
 
 在Android Studio设置的Plugins里，搜索：Bloc
 
@@ -70,6 +64,14 @@ equatable: ^1.2.3 #增强组件相等性判断
 - 是不是觉得，还在手动新建这些bloc文件low爆了；就好像fish_redux，不用插件，让我手动去创建那六个文件，写那些模板代码，真的要原地爆炸。
 
 # Bloc范例
+
+## 效果
+
+- 好了，哔哔了一堆，看下咱们要用flutter_bloc实现的效果。
+
+![bloc演示](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20200804152120.gif)
+
+- 直接开Chrome演示，大家在虚拟机上跑也一样。
 
 ## 初始化代码
 
@@ -563,7 +565,7 @@ class CounterPage extends StatelessWidget {
 }
 ```
 
-### 总结
+## 总结
 
 在Bloc模式里面，如果页面不是过于复杂，使用Cubit去写，基本完全够用了；但是如果业务过于复杂，还是需要用Bloc去写，需要将所有的事件行为管理起来，便于后期维护
 
@@ -571,7 +573,7 @@ OK，Bloc的简化模块，Cubit模式就这样讲完了，对于自己业务写
 
 # 全局Bloc
 
-## 场景
+## 说明
 
 **什么是全局Bloc？**
 
@@ -585,6 +587,218 @@ OK，Bloc的简化模块，Cubit模式就这样讲完了，对于自己业务写
 - 跨页面去调用事件，既然是全局的XxxBloc，这就说明，我们可以在任何页面，使用` BlocProvider.of<XxxBloc>(context)`调用全局XxxBloc中事件，这就起到了一种跨页面调用事件的效果
   - 使用全局Bloc做跨页面事件时，应该明白，当你关闭Bloc对应的页面，对应全局Bloc中的并不会被回收，下次进入页面，页面的数据还是上次退出页面修改的数据，这里应该使用StatefulWidget，在initState生命周期处，初始化数据；或者在dispose生命周期处，还原数据源
   - 思考下：全局Bloc对象存在周期是在整个App存活周期，必然不能创建过多的全局Bloc，跨页面传递事件使用全局Bloc应当只能做折中方案
+
+## 效果图
+
+- [点我体验一下](https://cnad666.github.io/flutter_use/web/index.html#/spanOne)
+
+![globalBloc](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20201214111143.gif)
+
+## 使用
+
+**来看下怎么创建和使用全局Bloc吧！**
+
+- 主入口配置
+  - 全局的Bloc创建还是蛮简单的，这边把`MultiBlocProvider`在Builder里面套在child上面就行了；当然了，把`MultiBlocProvider`套在MaterialApp上也是可以的
+  - 这样我们就获得一个全局的`SpanOneCubit`
+
+```dart
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: MainPage(),
+      builder: (BuildContext context, Widget child) {
+        return MultiBlocProvider(
+          providers: [
+            ///此处通过BlocProvider创建的Bloc或者Cubit是全局的
+            BlocProvider<SpanOneCubit>(
+              create: (BuildContext context) => SpanOneCubit(),
+            ),
+          ],
+          child: child,
+        );
+      },
+    );
+  }
+}
+```
+
+**需要用俩个Bloc模块来演示，这里分别用`SpanOneCubit`和`SpanTwoCubit`来演示，其中`SpanOneCubit`是全局的**
+
+**SpanOneCubit**
+
+- state
+  - 先来看看State模块的代码，这里很简单，只定义了count变量
+
+```dart
+class SpanOneState {
+  int count;
+
+  ///初始化方法
+  SpanOneState init() {
+    return SpanOneState()..count = 0;
+  }
+
+  ///克隆方法,针对于刷新界面数据
+  SpanOneState clone() {
+    return SpanOneState()..count = count;
+  }
+}
+```
+
+- view
+  - 这个页面仅仅是展示计数变量的变化，因为在主入口使用了`BlocProvider`创建了`SpanOneCubit`，所以在这个页面不需要再次创建，直接使用`BlocBuilder`便可以获取其state
+  - 可以发现，这个页面使用了StatefulWidget，在initState周期中，初始化了数据源；这样，每次进入页面，数据源就不会保存为上一次改动的来，都会被初始化为我们想要的值；这个页面能接受到任何页面调用其事件，这样就实现类似于广播的一种效果（`伪`）
+
+```dart
+class SpanOnePage extends StatefulWidget {
+  @override
+  _SpanOnePageState createState() => _SpanOnePageState();
+}
+
+class _SpanOnePageState extends State<SpanOnePage> {
+
+  @override
+  void initState() {
+    BlocProvider.of<SpanOneCubit>(context).init();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SpanOneCubit, SpanOneState>(builder: _body);
+  }
+
+  Widget _body(BuildContext context, SpanOneState state) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(title: Text('跨页面-One')),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () =>
+            BlocProvider.of<SpanOneCubit>(context).toSpanTwo(context),
+        child: const Icon(Icons.arrow_forward_outlined),
+      ),
+      body: Center(
+        child: Text(
+          'SpanTwoPage点击了 ${state.count} 次',
+          style: TextStyle(fontSize: 30.0),
+        ),
+      ),
+    );
+  }
+}
+```
+
+- cubit
+  - cubit里面有三个事件，初始化，跳转页面，计数自增
+
+```dart
+class SpanOneCubit extends Cubit<SpanOneState> {
+  SpanOneCubit() : super(SpanOneState().init());
+
+  void init() {
+    emit(state.init());
+  }
+
+  ///跳转到跨页面
+  void toSpanTwo(BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => SpanTwoPage()));
+  }
+
+  ///自增
+  void increase() {
+    state..count = ++state.count;
+    emit(state.clone());
+  }
+}
+```
+
+**SpanTwoCubit**
+
+- state
+  - 使用count，记录下我们点击自增的次数
+
+```dart
+class SpanTwoState {
+  int count;
+
+  ///初始化方法
+  SpanTwoState init() {
+    return SpanTwoState()..count = 0;
+  }
+
+  ///克隆方法,针对于刷新界面数据
+  SpanTwoState clone() {
+    return SpanTwoState()..count = count;
+  }
+}
+```
+
+- view
+  - 这地方我们需要创建使用BlocProvider一个SpanTwoCubit，这是使用Bloc的常规流程
+  - 在自增的点击事件里，我们调用本模块和`SpanOneCubit`中的自增方法，OK，这里我们就能同步的改变`SpanOneCubit`模块的数据了！
+
+```dart
+class SpanTwoPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => SpanTwoCubit()..init(context),
+      child: BlocBuilder<SpanTwoCubit, SpanTwoState>(builder: _body),
+    );
+  }
+
+  Widget _body(BuildContext context, SpanTwoState state) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(title: Text('跨页面-Two')),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          //改变SpanOneCubit模块数据
+          BlocProvider.of<SpanOneCubit>(context).increase();
+
+          //改变当前页面数据
+          BlocProvider.of<SpanTwoCubit>(context).increase();
+        },
+        child: const Icon(Icons.add),
+      ),
+      body: Center(
+        child: Text(
+          '当前点击了 ${state.count} 次',
+          style: TextStyle(fontSize: 30.0),
+        ),
+      ),
+    );
+  }
+}
+```
+
+- cubit
+  - 平平无奇的业务代码
+
+```dart
+class SpanTwoCubit extends Cubit<SpanTwoState> {
+  SpanTwoCubit() : super(SpanTwoState().init());
+
+  void init(BuildContext context){
+    emit(state.init());
+  }
+
+  ///自增
+  void increase() => emit(state.clone()..count = ++state.count);
+}
+```
+
+## 总结
+
+OK，这样便用全局Bloc实现了类似广播的一种效果
+
+- 使用全局去刷新：主题，字体样式和大小之类，每个页面都要使用BlocBuilder对应的全局bloc去刷新对应的全局view模块
 
 # Bloc API说明
 
@@ -888,6 +1102,8 @@ MultiRepositoryProvider(
 
 # 最后
 
+## 相关地址
+
 - Cubit范例代码地址
   - [Cubit范例代码](https://github.com/CNAD666/ExampleCode/tree/master/Flutter/flutter_use)
 - Bloc范例代码地址
@@ -897,3 +1113,11 @@ MultiRepositoryProvider(
 - flutter_bloc
   - GitHub：[https://github.com/felangel/bloc](https://github.com/felangel/bloc)
   - Pub：[https://pub.dev/packages/flutter_bloc](https://pub.dev/packages/flutter_bloc)
+
+## Flutter状态管理和Dialog问题
+
+- 可以看看下面的文章，相信对你应该有所帮助的
+
+[fish_redux使用详解---看完就会用！](https://juejin.cn/post/6860029460524040199)
+
+[一种更优雅的Flutter Dialog解决方案](https://juejin.cn/post/6902331428072390663)
