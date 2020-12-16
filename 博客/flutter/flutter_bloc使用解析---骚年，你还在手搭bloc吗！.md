@@ -10,7 +10,7 @@
 
 - [Bloc范例效果](http://cnad666.gitee.io/book_web_manage)
 
-- [Cubit范例效果](https://cnad666.gitee.io/flutter_use/#/)
+- [Cubit范例效果](https://cnad666.github.io/flutter_use/web/index.html#/)
 
 **下面是Flutter_Bloc历程的一系列链接**
 
