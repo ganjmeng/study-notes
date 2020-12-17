@@ -20,3 +20,6 @@
   - [Flutter事件分发（待完善）](https://github.com/CNAD666/study-notes/blob/master/%E5%8D%9A%E5%AE%A2/flutter/Flutter%E5%9D%91%E7%82%B9%E8%AE%B0%E5%BD%95%EF%BC%88%E5%B9%B2%E8%B4%A7%EF%BC%89.md)
   - [Flutter Webview添加Cookie的正确姿势](https://github.com/CNAD666/study-notes/blob/master/%E5%8D%9A%E5%AE%A2/flutter/Flutter%20Webview%E6%B7%BB%E5%8A%A0Cookie%E7%9A%84%E6%AD%A3%E7%A1%AE%E5%A7%BF%E5%8A%BF.md)
 
+- 开源
+  - [一种更优雅的Flutter Dialog解决方案](https://juejin.cn/post/6902331428072390663)
+
