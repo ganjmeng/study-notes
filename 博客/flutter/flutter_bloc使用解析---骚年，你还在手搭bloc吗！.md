@@ -1,5 +1,9 @@
 - [ ] **bloc的例子需要重写下,Mark一下**
 
+![flutter_bloc](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20201227193544.png)
+
+
+
 # 前言
 
 - 首先，有很多的文章在说flutter bloc模式的应用，但是百分之八九十的文章都是在说，使用StreamController+StreamBuilder搭建bloc，提升性能的会加上InheritedWidget，这些文章看了很多，真正写使用bloc作者开发的flutter_bloc却少之又少。没办法，只能去bloc的github上去找使用方式，最后去bloc官网翻文档。
@@ -931,7 +935,7 @@ MultiBlocProvider(
 
 ## BlocListener
 
-**BlocListener**是Flutter小部件，它带有`BlocWidgetListener`和可选，`Bloc`并调用，`listener`以响应bloc中的状态变化。它应用于需要在每次状态更改时发生一次的功能，例如导航，显示a `SnackBar`，显示a`Dialog`等。
+**BlocListener**是Flutter小部件，它带有`BlocWidgetListener`和一个可选`Bloc`，`listener`以响应bloc中的状态变化。它应用于需要在每次状态更改时发生一次的功能，例如导航，显示a `SnackBar`，显示a`Dialog`等。
 
 ```
 listener`与in和函数不同，每次状态更改（**不**包括初始状态）仅被调用一次。`builder``BlocBuilder``void
