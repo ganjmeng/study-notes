@@ -1,6 +1,6 @@
 - [ ] **bloc的例子需要重写下,Mark一下**
 
-**flutter_bloc使用将从图上的三个维度说明**
+**flutter_bloc使用将从下图的三个维度说明**
 
 ![flutter_bloc](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20201227193544.png)
 
