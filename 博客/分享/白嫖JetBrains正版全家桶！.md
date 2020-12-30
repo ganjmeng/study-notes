@@ -1,3 +1,5 @@
+**使用自己的开源项目，是可以白嫖JetBrains正版全家桶的！**
+
 # 前言
 
 - 之前在学Go的时候，想着要用什么编辑器，网上的大佬都讲，想省事直接用Goland，用VsCode配置会存在一些未知的使用体验问题，大佬们的敦敦教诲不能不听，下了一个Goland，看了下包年价格，正版的Goland需要199$，一千多块钱。。。
@@ -13,7 +15,7 @@
 - 不死心（qiongbi）的我，只能再去官网翻翻，看看官方是否给爱好学习的我们，留有白嫖的机会；然后，峰回路转，看到了这个
   - 只能感叹：**开源的伟大!**
 
-![image-20201229173659061](../../../资料/图片/image-20201229173659061.png)
+![image-20201229173659061](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/blog/share/20201230121257.png)
 
 # 白嫖全家桶
 
@@ -54,48 +56,48 @@
 - **Do we know you?**
   - No：之前没搞过这个许可证的就选这个吧
 
-![image-20201230100606707](../../../资料/图片/image-20201230100606707.png)
+![image-20201230100606707](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/blog/share/20201230121305.png)
 
 - Yes：之前弄过开源许可的，可以选这个，在jetBrains上登陆下自己账号，看下License ID，填上去就行了
 
-![image-20201230094438334](../../../资料/图片/image-20201230094438334.png)
+![image-20201230094438334](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/blog/share/20201230121309.png)
 
-![image-20201230101403516](../../../资料/图片/image-20201230101403516.png)
+![image-20201230101403516](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/blog/share/20201230121315.png)
 
 - **Tell us about your project**
   - 这里填下你的开源项目信息：Primary language(s)，Project age，Project website，Repository URL，License URL，No. of required licenses，Project description
   - 按照你的项目信息，如实填写就行了
 
-![image-20201230102458434](../../../资料/图片/image-20201230102458434.png)
+![image-20201230102458434](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/blog/share/20201230121323.png)
 
 - **Tell us about yourself**
   - Email address：这个邮箱要和你Github主页上的邮箱地址一致
   - Name：这个无所谓（这项有时会不出现）
   - A link to your profile on GitHub, etc：这个填你Github的主页地址，例如：https://github.com/CNAD666
 
-![image-20201230102149987](../../../资料/图片/image-20201230102149987.png)
+![image-20201230102149987](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/blog/share/20201230121331.png)
 
 - **OK，填完信息后，耐心等待就行了！**
   - 一般需要1到2周
 
-![image-20201230102554665](../../../资料/图片/image-20201230102554665.png)
+![image-20201230102554665](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/blog/share/20201230121338.png)
 
 - **通过申请后，会受到下面的邮件**
   - 点击：Take me to my license(s)
 
-![image-20201230103331571](../../../资料/图片/image-20201230103331571.png)
+![image-20201230103331571](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/blog/share/20201230121343.png)
 
 - **这个许可证可以直接和Jetbrains账号绑定；也可以直接下载离线激活码**
 
-  **![image-20201230104151724](../../../资料/图片/image-20201230104151724.png)**
+  ![image-20201230104151724](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/blog/share/20201230121351.png)
 
   - 使用账号激活
 
-  ![image-20201230105220808](../../../资料/图片/image-20201230105220808.png)
+  ![image-20201230105220808](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/blog/share/20201230121359.png)
 
   - 使用激活码
 
-  ![image-20201230105418369](../../../资料/图片/image-20201230105418369.png)
+  ![image-20201230105418369](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/blog/share/20201230121404.png)
 
 
 
@@ -105,27 +107,27 @@
 
 - 在这里，我们发现，主页上没有显示邮箱，这是不行的，会让审查人员无法判断，这是否是你的账号，下面，我们在主页上将自己的邮箱显示出来
 
-![image-20201230114214188](../../../资料/图片/image-20201230114214188.png)
+![image-20201230114214188](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/blog/share/20201230121411.png)
 
 - **点击Settings**
 
-![image-20201230111823598](../../../资料/图片/image-20201230111823598.png)
+![image-20201230111823598](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/blog/share/20201230121417.png)
 
 - **选择Emails**
   - 邮箱不显示的原因，是因为我们这里勾选了：Keep my email addresses private
   - 这里去掉这个勾选就行了
 
-![image-20201230113102883](../../../资料/图片/image-20201230113102883.png)
+![image-20201230113102883](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/blog/share/20201230121424.png)
 
 - **选择Profile**
-  - 在Public email处：选择一个你的邮箱，要和你Jetbrains申请页面填的邮箱一直哟(＾Ｕ＾)ノ~ＹＯ
+  - 在Public email处：选择一个你的邮箱，要和你Jetbrains申请页面填的邮箱一致哟(＾Ｕ＾)ノ~ＹＯ
   - 选完后，点击：Update profile
 
-![image-20201230113400757](../../../资料/图片/image-20201230113400757.png)
+![image-20201230113400757](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/blog/share/20201230121433.png)
 
 - 设置后：可以发现Github首页，邮箱已经显示出来了，欧了\(^o^)/~
 
-![image-20201230113644004](../../../资料/图片/image-20201230113644004.png)
+![image-20201230113644004](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/blog/share/20201230121441.png)
 
 # 最后
 
