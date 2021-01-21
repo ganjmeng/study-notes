@@ -20,13 +20,208 @@
 - 实现了全局BuildContext
 - 国际化，主题实现
 
-上面单单是build简写的优势，就会让我考虑是否去使用了，而且还能实现跨页面的功能，不想了，开搞！
+上面单单是build简写的优势，就会让我考虑是否去使用了，而且还能实现跨页面的功能，这还考虑啥，开搞！
 
 下来将全面的介绍GetX的使用，文章也不分篇水阅读量了，力求一文写清楚，方便大家随时查阅
 
+# 计数器
+
+## 准备
+
+- 首页导入GetX的插件
+
+```dart
+# getx 状态管理框架 https://pub.flutter-io.cn/packages/get
+get: ^3.24.0
+```
+
+- 主入口配置
+  - 只需要将`MaterialApp`改成`GetMaterialApp`即可
+
+```dart
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      home: CounterGetPage(),
+    );
+  }
+}
+```
+
+- 各模块导包，均使用下面包即可
+
+```dart
+import 'package:get/get.dart';
+```
+
+## 效果图
 
 
 
+## 实现
+
+**首页，当然是实现一个简单的计数器，来看GetX怎么将逻辑层和界面层解耦的**
+
+这里我们新建一个`counter_get`文件夹，在`counter_get`文件夹下创建`view`和`logic`文件
+
+### 响应式状态管理
+
+> 当数据源变化时，将自动执行刷新组件的方法
+
+- logic层
+  - 因为是处理页面逻辑的，加上Controller单词过长，也防止和Flutter自带的一些控件控制器弄混，所以该层用`logic`结尾，这里就定为了`logic`层，当然这点随个人意向，写Event，Controller均可
+  - 这里变量数值后写`.obs`操作，是说明定义了该变量为响应式变量，当该变量数值变化时，页面的刷新方法将自动刷新；基础类型，List，类都可以加`.obs`，使其变成响应式变量
+
+```dart
+class CounterGetLogic extends GetxController {
+  var count = 0.obs;
+
+  ///自增
+  void increase() => ++count;
+}
+```
+
+- view层
+
+  - 这地方获取到Logic层的实例后，就可进行操作了，大家可能会想：WTF，为什么实例的操作放在build方法里？逗我呢？---------  实际不然，stl是无状态组件，说明了他就不会被二次重组，所以实例操作只会被执行一次，而且Obx()方法是可以刷新组件的，完美解决刷新组件问题了
+
+    ```dart
+    class CounterGetPage extends StatelessWidget {
+      @override
+      Widget build(BuildContext context) {
+        CounterGetLogic logic = Get.put(CounterGetLogic());
+    
+        return Scaffold(
+          appBar: AppBar(title: const Text('GetX计数器')),
+          body: Center(
+            child: Obx(
+              () => Text('点击了 ${logic.count.value} 次',
+                  style: TextStyle(fontSize: 30.0)),
+            ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => logic.increase(),
+            child: const Icon(Icons.add),
+          ),
+        );
+      }
+    }
+    ```
+
+  - 当然，也可以这样写
+
+    ```dart
+    class CounterGetPage extends StatelessWidget {
+      final CounterGetLogic logic = Get.put(CounterGetLogic());
+    
+      @override
+      Widget build(BuildContext context) {
+        return Scaffold(
+          appBar: AppBar(title: const Text('GetX计数器')),
+          body: Center(
+            child: Obx(
+              () => Text('点击了 ${logic.count.value} 次',
+                  style: TextStyle(fontSize: 30.0)),
+            ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => logic.increase(),
+            child: const Icon(Icons.add),
+          ),
+        );
+      }
+    }
+    ```
+
+  - 可以发现刷新组件的方法极其简单：`Obx()`，这样可以愉快的到处写定点刷新操作了
+
+- Obx()方法刷新的条件
+
+  - 只有当响应式变量的值发生变化时，才会会执行刷新操作，当某个变量初始值为：“test”，再赋值为：“test”，并不会执行刷新操作
+  - 当你定义了一个响应式变量，该响应式变量改变时，包裹该响应式变量的Obx()方法才会执行刷新操作，其它的未包裹该响应式变量的Obx()方法并不会执行刷新操作，Cool！
+
+- 来看下如果把整个类对象设置成响应类型，如何实现更新操作呢？
+
+  - 下面解释来自官方README文档
+
+```dart
+// model
+// 我们将使整个类成为可观察的，而不是每个属性。
+class User() {
+    User({this.name = '', this.age = 0});
+    String name;
+    int age;
+}
+
+// controller
+final user = User().obs;
+//当你需要更新user变量时。
+user.update( (user) { // 这个参数是你要更新的类本身。
+    user.name = 'Jonny';
+    user.age = 18;
+});
+// 更新user变量的另一种方式。
+user(User(name: 'João', age: 35));
+
+// view
+Obx(()=> Text("Name ${user.value.name}: Age: ${user.value.age}"))
+    // 你也可以不使用.value来访问模型值。
+    user().name; // 注意是user变量，而不是类变量（首字母是小写的）。
+```
+
+### 简单状态管理器
+
+> GetBuilder：这是一个极其轻巧的状态管理器，占用资源极少！
+
+- logic：先来看看logic层
+
+```dart
+class CounterEasyGetLogic extends GetxController {
+  var count = 0;
+
+  void increase() {
+    ++count;
+    update();
+  }
+}
+```
+
+- view
+
+```dart
+class CounterEasyGetPage extends StatelessWidget {
+  final CounterEasyGetLogic logic = Get.put(CounterEasyGetLogic());
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('计数器-简单式')),
+      body: Center(
+        child: GetBuilder<CounterEasyGetLogic>(
+          builder: (logicGet) => Text(
+            '点击了 ${logicGet.count} 次',
+            style: TextStyle(fontSize: 30.0),
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => logic.increase(),
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+```
+
+- 分析下：GetBuilder这个方法
+  - init：虽然上述代码没用到，但是，这个参数是存在在GetBuilder中的，因为在加载变量的时候就使用`Get.put()`生成了`CounterEasyGetLogic`对象，GetBuilder会自动查找该对象，所以，就可以不使用init参数
+  - builder：方法参数，拥有一个入参，类型便是GetBuilder所传入泛型的类型
+  - initState，dispose等：GetBuilder拥有StatefulWidget所有周期回调，可以在相应回调内做一些操作
 
 # 路由管理
 
@@ -92,30 +287,31 @@ class MyApp extends StatelessWidget {
 ```dart
 class RouteConfig{
   ///主页面
-  static String main = "/";
+  static final String main = "/";
 
   ///dialog页面
-  static String dialog = "/dialog";
+  static final String dialog = "/dialog";
 
   ///bloc计数器模块
-  static String counter = "/counter";
+  static final String counter = "/counter";
 
   ///测试布局页面
-  static String testLayout = "/testLayout";
+  static final String testLayout = "/testLayout";
 
   ///演示SmartDialog控件
-  static String smartDialog = "/smartDialog";
+  static final String smartDialog = "/smartDialog";
 
   ///Bloc跨页面传递事件
-  static String spanOne = "/spanOne";
-  static String spanTwo = "/spanOne/spanTwo";
+  static final String spanOne = "/spanOne";
+  static final String spanTwo = "/spanOne/spanTwo";
 
-  ///GetX跨页面传递时间
-  static String jumpOne = "/jumpOne";
-  static String jumpTwo = "/jumpOne/jumpTwo";
+  ///GetX 计数器  跨页面交互
+  static final String counterGet = "/counterGet";
+  static final String jumpOne = "/jumpOne";
+  static final String jumpTwo = "/jumpOne/jumpTwo";
 
   ///别名映射页面
-  static List<GetPage> getPages = [
+  static final List<GetPage> getPages = [
     GetPage(name: main, page: () => MainPage()),
     GetPage(name: dialog, page: () => Dialog()),
     GetPage(name: counter, page: () => CounterPage()),
@@ -123,6 +319,7 @@ class RouteConfig{
     GetPage(name: smartDialog, page: () => SmartDialogPage()),
     GetPage(name: spanOne, page: () => SpanOnePage()),
     GetPage(name: spanTwo, page: () => SpanTwoPage()),
+    GetPage(name: counterGet, page: () => CounterGetPage()),
     GetPage(name: jumpOne, page: () => JumpOnePage()),
     GetPage(name: jumpTwo, page: () => JumpTwoPage()),
   ];
