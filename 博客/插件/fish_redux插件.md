@@ -41,6 +41,8 @@
 
 - 重启下IDEA，然后再回到运行项的设置，选择：Edit Configurations...，重新对自己的插件设置下Use classpath of module即可
 
+![img](https://blog.xiaohansong.com/media/15509093931549/15509277759873.jpg)
+
 ### Plugin Gradle 插件
 
 - 使用Grade开发插件，运行设置就比较简单了，选择Gradle
