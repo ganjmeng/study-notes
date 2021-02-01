@@ -1,5 +1,3 @@
-- [ ] **bloc的例子需要重写下,Mark一下**
-
 **flutter_bloc使用将从下图的三个维度说明**
 
 ![flutter_bloc](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20201227193544.png)
@@ -1124,10 +1122,10 @@ MultiRepositoryProvider(
   - GitHub：[https://github.com/felangel/bloc](https://github.com/felangel/bloc)
   - Pub：[https://pub.dev/packages/flutter_bloc](https://pub.dev/packages/flutter_bloc)
 
-## Flutter状态管理和Dialog问题
+## 系列文章
 
-- 可以看看下面的文章，相信对你应该有所帮助的
-
-[fish_redux使用详解---看完就会用！](https://juejin.cn/post/6860029460524040199)
-
-[一种更优雅的Flutter Dialog解决方案](https://juejin.cn/post/6902331428072390663)
+- **解决方案**
+  - Dialog解决方案，墙裂推荐：[一种更优雅的Flutter Dialog解决方案](https://juejin.cn/post/6902331428072390663)
+- **状态管理**
+  - 中小项目墙裂推荐：[Flutter GetX使用---简洁的魅力！](https://juejin.cn/post/6924104248275763208)
+  - 大型项目推荐：[fish_redux使用详解---看完就会用！](https://juejin.cn/post/6860029460524040199)

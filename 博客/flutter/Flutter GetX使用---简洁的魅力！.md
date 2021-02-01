@@ -955,13 +955,11 @@ print(Get.parameters['user']);
 
 > 引流了，手动滑稽.jpg
 
-- Dialog解决方案，墙裂推荐
+- **解决方案**
+  - Dialog解决方案，墙裂推荐：[一种更优雅的Flutter Dialog解决方案](https://juejin.cn/post/6902331428072390663)
 
-[一种更优雅的Flutter Dialog解决方案](https://juejin.cn/post/6902331428072390663)
+- **状态管理**
+  - 大型项目推荐：[fish_redux使用详解---看完就会用！](https://juejin.cn/post/6860029460524040199)
 
-- 状态管理篇
-
-[fish_redux使用详解---看完就会用！](https://juejin.cn/post/6860029460524040199)
-
-[flutter_bloc使用解析---骚年，你还在手搭bloc吗！](https://juejin.cn/post/6856268776510504968)
+  - [flutter_bloc使用解析---骚年，你还在手搭bloc吗！](https://juejin.cn/post/6856268776510504968)
 

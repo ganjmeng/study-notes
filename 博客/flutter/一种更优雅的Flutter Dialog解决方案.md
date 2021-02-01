@@ -413,11 +413,13 @@ FlutterSmartDialog一些信息
 - Pub：[flutter_smart_dialog](https://pub.flutter-io.cn/packages/flutter_smart_dialog)
 - 使用效果体验：[点击体验一下](https://cnad666.github.io/flutter_use/web/index.html#/smartDialog)
 
-## Flutter的状态管理
+## 系列文章
 
-- 可以看看下面的文章，相信对你应该有所帮助的
+**状态管理**
 
-[fish_redux使用详解---看完就会用！](https://juejin.cn/post/6860029460524040199)
+- 中小项目墙裂推荐：[Flutter GetX使用---简洁的魅力！](https://juejin.cn/post/6924104248275763208)
 
-[flutter_bloc使用解析---骚年，你还在手搭bloc吗！](https://juejin.cn/post/6856268776510504968)
+- 大型项目推荐：[fish_redux使用详解---看完就会用！](https://juejin.cn/post/6860029460524040199)
+
+- [flutter_bloc使用解析---骚年，你还在手搭bloc吗！](https://juejin.cn/post/6856268776510504968)
 

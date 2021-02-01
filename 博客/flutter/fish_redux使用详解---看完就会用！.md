@@ -2141,12 +2141,16 @@ int randomColor() {
 
 ## 广播
 
-fish_redux中是带有广播的通信方式，使用的方式很简单，这本是effect层，ctx参数自带的一个api，这里简单介绍一下
+广播在复杂的业务场景，能够起到非常巨大的作用，能非常轻松使用跨页面交互，跨Component交互！
+
+fish_redux中是带有广播的通信方式，使用的方式很简单，这本是effect层，ctx参数自带的一个api，这里介绍一下
 
 ### 使用
 
+**说明**：请注意广播可以通知任何页面的枚举方法，你可以单独写一个枚举事件，也可以不写，直接使用某个页面的枚举事件，是完全可以
+
 - action
-  - 广播事件单独写了一个action文件，便于统一管理
+  - 广播事件单独写了一个action文件，仅方便演示，也可以不单独新建一个广播枚举Action
 
 ```dart
 enum BroadcastAction { toNotify }
@@ -2186,7 +2190,7 @@ void _receiveNotify(Action action, Context<FirstState> ctx) async {
 
 ### 说明
 
-广播的使用还是挺简单的，基本和dispatch的使用是一致的，dispatch是模块的，而broadcast是有页面栈，就能通知其他页面，很多情况下，我们在一个页面进行了操作，其他页面也需要同步做一些处理，使用广播就很简单了
+广播的使用还是挺简单的，基本和dispatch的使用是一致的，dispatch是模块的，而broadcast是处于Page或Component都能进行通信交互，很多情况下，我们在一个页面进行了操作，其他页面也需要同步做一些处理，使用广播就很简单了
 
 **注意：** 广播发送和接受是一对多的关系，一处发送，可以在多处接受；和dispatch发送事件，如果在effect里面接受，在reducer就无法接受的情况是不一样的（被拦截了）
 
@@ -2248,10 +2252,12 @@ TestState _onRefresh(TreeState state, Action action) {
 
 ![img](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20200812171815.jpg)
 
-### Flutter状态管理和Dialog问题
+### 系列文章
 
-- 可以看看下面的文章，相信对你应该有所帮助的
+- **解决方案**
+  - Dialog解决方案，墙裂推荐：[一种更优雅的Flutter Dialog解决方案](https://juejin.cn/post/6902331428072390663)
 
-[flutter_bloc使用解析---骚年，你还在手搭bloc吗！](https://juejin.cn/post/6856268776510504968)
+- **状态管理**
+  - 中小项目墙裂推荐：[Flutter GetX使用—简洁的魅力！](https://juejin.cn/post/6924104248275763208)
+  - [flutter_bloc使用解析—骚年，你还在手搭bloc吗！](https://juejin.cn/post/6856268776510504968)
 
-[一种更优雅的Flutter Dialog解决方案](https://juejin.cn/post/6902331428072390663)
