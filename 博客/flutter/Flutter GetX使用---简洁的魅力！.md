@@ -85,7 +85,7 @@ import 'package:get/get.dart';
 - 说下插件的功能含义
   - Model：生成GetX的模式，
     - Default：默认模式，生成三个文件：state，logic，view
-    - Easy：简单模式，生成三个文件：logic，view
+    - Easy：简单模式，生成俩个文件：logic，view
   - Function：功能选择
     - useFolder：使用文件，选择后会生成文件夹，大驼峰命名自动转换为：小写+下划线
     - usePrefix：使用前缀，生成的文件前加上前缀，前缀为：大驼峰命名自动转换为：小写+下划线
@@ -960,6 +960,5 @@ print(Get.parameters['user']);
 
 - **状态管理**
   - 大型项目推荐：[fish_redux使用详解---看完就会用！](https://juejin.cn/post/6860029460524040199)
-
   - [flutter_bloc使用解析---骚年，你还在手搭bloc吗！](https://juejin.cn/post/6856268776510504968)
 
