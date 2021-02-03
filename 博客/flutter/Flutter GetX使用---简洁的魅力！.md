@@ -390,7 +390,7 @@ class JumpOnePage extends StatelessWidget {
 - logic
   - 将演示怎么调用前一个页面的事件
   - 怎么接收上个页面数据
-  - 请注意，`GetxController`包含比较完整的生命周期回调，可以在`onInit()`接受传递的数据，如果接收的数据需要刷新到界面上，请一定要等界面加载完毕后，再进行赋值刷新操作，这里送一个`ViewUtil`类
+  - 请注意，`GetxController`包含比较完整的生命周期回调，可以在`onInit()`接受传递的数据；如果接收的数据需要刷新到界面上，请`onReady`在回调里面接收数据操作，`onReady`是在`addPostFrameCallback`回调中调用，能保证界面是加载完毕后，才调用`onReady`的
 
 ```dart
 class JumpTwoLogic extends GetxController {
@@ -398,30 +398,15 @@ class JumpTwoLogic extends GetxController {
   var msg = ''.obs;
 
   @override
-  void onInit() async {
-    await ViewUtil.initFinish();
-
+  void onReady() {
     var map = Get.arguments;
     msg.value = map['msg'];
 
-    super.onInit();
+    super.onReady();
   }
 
   ///跳转到跨页面
   void increase() => count++;
-}
-
-class ViewUtil {
-  ///界面初始化完成
-  static Future<void> initFinish() async {
-    Completer<void> completer = Completer();
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      completer.complete();
-    });
-
-    return completer.future;
-  }
 }
 ```
 
