@@ -330,7 +330,7 @@ class CounterEasyGetPage extends StatelessWidget {
 - [体验一下](https://cnad666.github.io/flutter_use/web/index.html#/jumpOne)
 - Cool，这才是真正的跨页面交互！下级页面能随意调用上级页面事件，且关闭页面后，下次重进，数据也很自然重置了（全局Bloc不会重置，需要手动重置）
 
-![jump_getx](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/getx_jump.gif)
+![jump_getx](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/jump_getx.gif)
 
 ## 实现
 
@@ -347,7 +347,7 @@ class JumpOneLogic extends GetxController {
 
   ///跳转到跨页面
   void toJumpTwo() {
-    Get.toNamed(RouteConfig.jumpTwo);
+    Get.toNamed(RouteConfig.jumpTwo, arguments: {'msg': '我是上个页面传递过来的数据'});
   }
 
   ///跳转到跨页面
@@ -385,16 +385,43 @@ class JumpOnePage extends StatelessWidget {
 
 ### 页面二
 
-这个页面就是重点了，将演示怎么调用前一个页面的事件
+这个页面就是重点了
 
 - logic
+  - 将演示怎么调用前一个页面的事件
+  - 怎么接收上个页面数据
+  - 请注意，`GetxController`包含比较完整的生命周期回调，可以在`onInit()`接受传递的数据，如果接收的数据需要刷新到界面上，请一定要等界面加载完毕后，再进行赋值刷新操作，这里送一个`ViewUtil`类
 
 ```dart
 class JumpTwoLogic extends GetxController {
   var count = 0.obs;
+  var msg = ''.obs;
+
+  @override
+  void onInit() async {
+    await ViewUtil.initFinish();
+
+    var map = Get.arguments;
+    msg.value = map['msg'];
+
+    super.onInit();
+  }
 
   ///跳转到跨页面
   void increase() => count++;
+}
+
+class ViewUtil {
+  ///界面初始化完成
+  static Future<void> initFinish() async {
+    Completer<void> completer = Completer();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      completer.complete();
+    });
+
+    return completer.future;
+  }
 }
 ```
 
@@ -420,10 +447,19 @@ class JumpTwoPage extends StatelessWidget {
         child: const Icon(Icons.add),
       ),
       body: Center(
-        child: Obx(
-          () => Text('跨页面-Two点击了 ${twoLogic.count.value} 次',
-              style: TextStyle(fontSize: 30.0)),
-        ),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          //计数显示
+          Obx(
+            () => Text('跨页面-Two点击了 ${twoLogic.count.value} 次',
+                style: TextStyle(fontSize: 30.0)),
+          ),
+
+          //传递数据
+          Obx(
+            () => Text('传递的数据：${twoLogic.msg.value}',
+                style: TextStyle(fontSize: 30.0)),
+          ),
+        ]),
       ),
     );
   }
@@ -708,7 +744,7 @@ class MyApp extends StatelessWidget {
 - 路由的相关使用
   - 使用是非常简单，使用Get.to()之类api即可，此处简单演示，详细api说明，放在本节结尾
 
-```
+```dart
 //跳转新页面
 Get.to(SomePage());
 ```
@@ -825,14 +861,14 @@ Get.offAllNamed("/NextScreen");
 
 只要发送你想要的参数即可。Get在这里接受任何东西，无论是一个字符串，一个Map，一个List，甚至一个类的实例。
 
-```
+```dart
 Get.to(NextScreen(), arguments: 'Get is the best');
 Get.toNamed("/NextScreen", arguments: 'Get is the best');
 ```
 
 在你的类或控制器上：
 
-```
+```dart
 print(Get.arguments);
 //print out: Get is the best
 ```
