@@ -390,7 +390,7 @@ class JumpOnePage extends StatelessWidget {
 - logic
   - 将演示怎么调用前一个页面的事件
   - 怎么接收上个页面数据
-  - 请注意，`GetxController`包含比较完整的生命周期回调，可以在`onInit()`接受传递的数据；如果接收的数据需要刷新到界面上，请`onReady`在回调里面接收数据操作，`onReady`是在`addPostFrameCallback`回调中调用，能保证界面是加载完毕后，才调用`onReady`的
+  - 请注意，`GetxController`包含比较完整的生命周期回调，可以在`onInit()`接受传递的数据；如果接收的数据需要刷新到界面上，请在`onReady`回调里面接收数据操作，`onReady`是在`addPostFrameCallback`回调中调用，刷新数据的操作在`onReady`进行，能保证界面是初始加载完毕后才进行页面刷新操作的
 
 ```dart
 class JumpTwoLogic extends GetxController {
@@ -579,7 +579,7 @@ class CounterHighGetPage extends StatelessWidget {
 
 > 看了上面的改造，屏幕前的你可能想吐槽了：坑比啊，之前简简单单的逻辑层，被拆成俩个，还搞得这么麻烦，你是猴子请来的逗比吗？
 >
-> 大家先别急着吐槽，当业务过于复杂，state层，也是会维护很多东西的，让我看看下面的一个小栗子，下面实例代码是不能直接运行的，想看详细运行代码，请查看项目：[flutter_use](https://github.com/CNAD666/flutter_use)
+> 大家先别急着吐槽，当业务过于复杂，state层，也是会维护很多东西的，让我们看看下面的一个小栗子，下面实例代码是不能直接运行的，想看详细运行代码，请查看项目：[flutter_use](https://github.com/CNAD666/flutter_use)
 
 - state
 
@@ -700,7 +700,7 @@ class MainPage extends StatelessWidget {
 
 ## 最后
 
-- 该模块的效果图就不放了，和上面计数器效果一模一样，想体验一下，可点击：[体验一下]()
+- 该模块的效果图就不放了，和上面计数器效果一模一样，想体验一下，可点击：[体验一下](https://cnad666.github.io/flutter_use/web/index.html#/counterHighGet)
 - 简单的业务模块，可以使用俩层结构：logic，view；复杂的业务模块，推荐使用三层结构：state，logic，view
 
 # 路由管理
