@@ -256,8 +256,8 @@ user(User(name: 'João', age: 35));
 
 // view
 Obx(()=> Text("Name ${user.value.name}: Age: ${user.value.age}"))
-    // 你也可以不使用.value来访问模型值。
-    user().name; // 注意是user变量，而不是类变量（首字母是小写的）。
+// 你也可以不使用.value来访问模型值。
+user().name; // 注意是user变量，而不是类变量（首字母是小写的）。
 ```
 
 ### 简单状态管理
