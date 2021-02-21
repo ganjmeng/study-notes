@@ -62,17 +62,21 @@ class MyApp extends StatelessWidget {
 
 使用`FlutterSmartDialog`包裹下child即可，下面就可以愉快的使用SmartDialog了
 
-- 使用Toast
+- 使用Toast：因为toast特殊性，此处单独对toast做了一些优化
+  - time：可选，Duration类型，默认1500ms
+  - isDefaultDismissType：toast消失的类型，默认true
+    - true：默认消失类型，类似android的toast，toast一个一个展示
+    - false：非默认消失类型，多次点击，后面toast会顶掉前者的toast显示
+  - widget：可以自定义toast
   - msg：必传信息
-  - time：可选，Duration类型
   - alignment：可选，控制toast位置
-  - 如果想使用花里胡哨的Toast效果，使用show方法定制就行了，炒鸡简单喔，懒得自己写的，抄下我的ToastWidget，改下属性就行了哈
+  - 如果想使用花里胡哨的Toast效果，请使用showToast方法定制就行了，炒鸡简单喔，懒得自己写的，抄下我的ToastWidget，改下属性就行了哈
 
 ```dart
 SmartDialog.showToast('test toast');
 ```
 
-- 使用Loading
+- 使用Loading：loading拥有诸多设置属性，参照下方的`SmartDialog配置参数说明`即可
   - msg：可选，loading动画下面的文字信息（默认：加载中...）
 
 ```dart
@@ -85,7 +89,7 @@ SmartDialog.dismiss();
 ```
 
 - 自定义dialog
-  - 使用SmartDialog.show()方法即可，里面含有众多'Temp'为后缀的参数，和下述无'Temp'为后缀的参数功能一致
+  - 使用SmartDialog.show()方法即可，里面含有众多`Temp`为后缀的参数，和下述无`Temp`为后缀的参数功能一致
   - 特殊属性`isUseExtraWidget`：是否使用额外覆盖浮层，可与主浮层独立开；可与loading，dialog之类独立开，自带的showToast便是开启了该配置，可与loading共存
 
 ```dart
@@ -126,8 +130,6 @@ SmartDialog.instance.config
     ..animationDuration = Duration(milliseconds: 270)
     ..isPenetrate = false
     ..maskColor = Colors.black.withOpacity(0.1)
-    ..isExist = false
-    ..isExistExtra = false
     ..alignment = Alignment.center;
 ```
 
