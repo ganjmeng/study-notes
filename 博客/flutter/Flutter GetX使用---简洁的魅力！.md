@@ -238,7 +238,7 @@ class CounterGetLogic extends GetxController {
 ```dart
 // model
 // 我们将使整个类成为可观察的，而不是每个属性。
-class User() {
+class User{
     User({this.name = '', this.age = 0});
     String name;
     int age;
@@ -255,7 +255,7 @@ user.update( (user) { // 这个参数是你要更新的类本身。
 user(User(name: 'João', age: 35));
 
 // view
-Obx(()=> Text("Name ${user.value.name}: Age: ${user.value.age}"))
+Obx(()=> Text("Name ${user.value.name}: Age: ${user.value.age}"));
 // 你也可以不使用.value来访问模型值。
 user().name; // 注意是user变量，而不是类变量（首字母是小写的）。
 ```
