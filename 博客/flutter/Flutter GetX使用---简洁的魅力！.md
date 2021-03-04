@@ -707,6 +707,30 @@ class MainPage extends StatelessWidget {
 
 **GetX实现了一套用起来十分简单的路由管理，可以使用一种极其简单的方式导航，也可以使用命名路由导航**
 
+**关于简单路由和命名路由的区别**
+
+- 简单路由：十分简单，看下下面的例子
+
+```dart
+Get.to(SomePage());
+```
+
+- 命名路由
+  - 在web上，可以直接通过命名的url直接导航页面
+  - 实现路由拦截的操作，举一个官方文档的例子：很轻松的实现了一个未登录，跳转登录页面功能
+
+```dart
+GetStorage box = GetStorage();
+
+GetMaterialApp(
+  getPages: [
+    GetPage(name: '/', page:(){
+      return box.hasData('token') ? Home() : Login();
+    })
+  ]
+)
+```
+
 ## 简单路由
 
 - 主入口配置
