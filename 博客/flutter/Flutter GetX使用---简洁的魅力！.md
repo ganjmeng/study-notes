@@ -313,8 +313,10 @@ class CounterEasyGetPage extends StatelessWidget {
 
 **分析**
 
-- `GetBuilder`内部实际上是对StatefulWidget的封装，所以占用资源极小
+- Obx是配合Rx响应式变量使用、GetBuilder是配合update使用：请注意，这完全是俩套定点刷新控件的方案
+  - 区别：前者响应式变量变化，Obx自动刷新；后者需要使用update手动调用刷新
 - 响应式变量，因为使用的是`StreamBuilder`，会消耗一定资源
+- `GetBuilder`内部实际上是对StatefulWidget的封装，所以占用资源极小
 
 **使用场景**
 
