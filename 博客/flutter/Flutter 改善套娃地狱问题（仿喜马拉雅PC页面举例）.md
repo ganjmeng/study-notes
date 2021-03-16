@@ -392,7 +392,7 @@ class HimalayaPersonalInfo extends StatelessWidget {
 
 ![image-20210314214406466](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20210314225342.png)
 
-- 填上方法命后，就能自动生成一个widget方法
+- 填上方法名后，就能自动生成一个widget方法
 - 如果你提取的Widget块中，还含有一些数据，自动生成的方法都会带上相应参数，非常方便
 
 ![image-20210314214520198](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20210314225347.png)
