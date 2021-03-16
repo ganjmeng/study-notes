@@ -102,7 +102,7 @@ import 'package:get/get.dart';
 - 在设置里面选择：Plugins ---> 输入“getx”搜索 ---> 选择名字为：“GeX” ---> 然后安装 ---> 最后记得点击下“Apply”
 - 如果在使用该插件的过程中有什么问题，请在该项目的github上给我提issue，我看到后，会尽快处理
 
-![image-20210130182527494](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20210130182833.png)
+![image-20210316134318922](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20210316134426.png)
 
 
 
