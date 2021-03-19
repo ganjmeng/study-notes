@@ -36,7 +36,7 @@
 
 - Web：[仿喜马拉雅页面](https://cnad666.github.io/flutter_use/web/index.html#/himalaya)
   - web无法强制设置窗口大小，可能需要你调整下web窗口的宽度，以达到最佳效果
-- Windows：[Windows平台安装包](https://wwa.lanzous.com/izW8Rmwws6f)
+- Windows：[Windows平台安装包](https://wwa.lanzous.com/iFaFRn31b1e)
   - 如果你的电脑开启了125%的`缩放与布局`，请打首页的`开启缩放`按钮
 - 项目地址：[flutter_use](https://github.com/CNAD666/flutter_use)
 
@@ -59,11 +59,11 @@
 
 - 原版的喜马拉雅PC页面
 
-![image-20210314165954339](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20210314225301.png)
+![image-20210314165954339](https://cdn.jsdelivr.net/gh/CNAD666/MyData@release/pic/flutter/blog/20210314225301.png)
 
 - 仿制的喜马拉雅页面
 
-![](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20210314225310.png)
+![](https://cdn.jsdelivr.net/gh/CNAD666/MyData@release/pic/flutter/blog/20210314225310.png)
 
 ## 总结
 
@@ -314,7 +314,7 @@ Widget himalayaBuildScrollInfoListBg({List<Widget> children}) {
 
 - 来看看这个顶部一些功能按钮的布局，这块涉及到很多事件交互，所以单独提成了一个业务Widget
 
-![image-20210314212412718](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20210314225335.png)
+![image-20210314212412718](https://cdn.jsdelivr.net/gh/CNAD666/MyData@release/pic/flutter/blog/20210314225335.png)
 
 - 实现代码：关于业务Widget，这是基石，规范写好后，后期修改，异常简单
   - 结合上面的效果图，再结合下面的代码，大家应该一眼看出来，就知道是哪个widget方法，对应界面上的哪个控件；如果你想修改哪个控件样式，直接点进对应的widget方法里修改即可
@@ -390,12 +390,12 @@ class HimalayaPersonalInfo extends StatelessWidget {
   - 选中你需要提取的Widget代码
   - 打开 Flutter Outline 选择`右箭头`图片
 
-![image-20210314214406466](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20210314225342.png)
+![image-20210314214406466](https://cdn.jsdelivr.net/gh/CNAD666/MyData@release/pic/flutter/blog/20210314225342.png)
 
 - 填上方法名后，就能自动生成一个widget方法
 - 如果你提取的Widget块中，还含有一些数据，自动生成的方法都会带上相应参数，非常方便
 
-![image-20210314214520198](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20210314225347.png)
+![image-20210314214520198](https://cdn.jsdelivr.net/gh/CNAD666/MyData@release/pic/flutter/blog/20210314225347.png)
 
 ### 列表类样式封装
 
@@ -405,7 +405,7 @@ class HimalayaPersonalInfo extends StatelessWidget {
 
 - 猜你喜欢模块
 
-![image-20210314220037075](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20210314225354.png)
+![image-20210314220037075](https://cdn.jsdelivr.net/gh/CNAD666/MyData@release/pic/flutter/blog/20210314225354.png)
 
 - 代码分析：总体是Column布局，分上下俩模块
   - 上模块使用Row搞定即可
@@ -484,7 +484,7 @@ class HimalayaGuess extends StatelessWidget {
   - 栏目：可划分具体的Item
     - Item：标题 + 栏目（List数据控制）
 
-![image-20210314221811228](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20210314225402.png)
+![image-20210314221811228](https://cdn.jsdelivr.net/gh/CNAD666/MyData@release/pic/flutter/blog/20210314225402.png)
 
 - 代码实现
   - 上面的布局整体是由数据源驱动页面，数据能控制页面item生成
@@ -657,7 +657,7 @@ Flutter直接从根本上样式结构不分离，结构上直接从上往上下�
 
 其实，对于很多言论，我们没必要在意；角色互换，说不定，对方此刻的行为，就是我们自己以后可能会做的事。
 
-![小丑竟是我自己是什么梗小丑竟是我自己是什么意思出处在哪-站长之家](https://pic.chinaz.com/thumb/2020/1223/6374431204931358119476526.png)
+![小丑竟是我自己是什么梗小丑竟是我自己是什么意思出处在哪-站长之家](https://cdn.jsdelivr.net/gh/CNAD666/MyData@release/pic/flutter/norm/20210318231143.jpeg)
 
 **其实，我们都是打工人，又何必撕来撕去呢？**
 
